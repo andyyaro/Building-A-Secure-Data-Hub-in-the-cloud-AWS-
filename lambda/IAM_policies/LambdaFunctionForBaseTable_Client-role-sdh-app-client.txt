@@ -1,0 +1,26 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "logs:CreateLogGroup",
+      "Resource": "arn:aws:logs:us-east-1:<CLIENT_APP_ACCOUNT_ID>:*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": [
+        "arn:aws:logs:us-east-1:<CLIENT_APP_ACCOUNT_ID>:log-group:/aws/lambda/LambdaFunctionForBaseTable_Client:*"
+      ]
+    },
+    {
+      "Sid": "VisualEditor0",
+      "Effect": "Allow",
+      "Action": "sts:AssumeRole",
+      "Resource": "ROLE_ARN_IN_DATA_ACCOUNT"
+    }
+  ]
+}
