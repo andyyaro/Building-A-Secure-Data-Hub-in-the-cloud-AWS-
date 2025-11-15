@@ -17,8 +17,7 @@ def assuming_role_in_sdh_data():
 
 # Parsing request for id. 
 def parsing_for_id(event):
-  claims = event["requestContext"]["authorizer"]["claims"]
-  client_id = claims["custom:client_id"]
+  client_id = event['client_id']
   print(f"Successfully retrieved Id: {client_id} from request.")
   return client_id
 
@@ -43,6 +42,8 @@ def retrieving_client_info(client_id, temp_credentials):
   
 # Putting it all together and returning the client's info to the API.
 def lambda_handler(event, context):
+    print("Printing the event") # Good for debugging. Logs are made available in cloudwatch.
+    print(event)
     item = retrieving_client_info(parsing_for_id(event), assuming_role_in_sdh_data())
     print(context)
     return {
