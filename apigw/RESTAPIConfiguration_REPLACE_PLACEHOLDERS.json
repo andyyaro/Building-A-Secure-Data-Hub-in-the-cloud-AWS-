@@ -1,0 +1,69 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Secure Client Profile API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/client/profile": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Empty"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoClientUserPool": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "uri": "arn:aws:apigateway:<REGION>:lambda:path/2015-03-31/functions/arn:aws:lambda:<REGION>:<ACCOUNT_ID>:function:LambdaFunctionForBaseTable_Client/invocations",
+          "httpMethod": "POST",
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "requestTemplates": {
+            "application/json": "## Clarification on VTL syntax \n#* Anything starting with # is a directive (a command in the template language).\n   Anything starting with $ is a variable or a built-in object.\n   We could think of built-in object as predefined variables provided to us by apigw.\n   set() is a declarative statement, we're telling it to ironically set something, fix it. We’re giving it a directive.\n\n\n   $context is also a built-in object. We could think of it as a container to how apigw handled the request: requestid, http method, resource path, api-id, source ip, stage, etc. \n   So all the things it contains are of internal origin (coming from/built by apigw) when the request came through)\n\n   The authorizer is going to decode the authorization header it received and validate it. \n   Then, it’ll make the decoded token claims available internally, to the api. \n*#\n\n#set($client_id = $context.authorizer.claims['custom:client_id'])\n\n#if(!$client_id)\n  #set($context.responseOverride.status = 400)\n  {\n    \"message\": \"Missing Client Id.\"\n  }\n#else\n  {\n    \"client_id\": \"$client_id\",\n    \"request_id\": \"$context.requestId\",\n    \"source\": \"client-portal\",\n    \"http_method\": \"$context.httpMethod\",\n    \"path\": \"$context.resourcePath\",\n    \"request_time\": \"$context.requestTimeEpoch\"\n  }\n#end"
+          },
+          "passthroughBehavior": "when_no_match",
+          "timeoutInMillis": 29000,
+          "contentHandling": "CONVERT_TO_TEXT",
+          "type": "aws"
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Empty": {
+        "title": "Empty Schema",
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "CognitoClientUserPool": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header",
+        "x-amazon-apigateway-authtype": "cognito_user_pools",
+        "x-amazon-apigateway-authorizer": {
+          "providerARNs": [
+            "arn:aws:cognito-idp:<REGION>:<ACCOUNT_ID>:userpool/<USER_POOL_ID>"
+          ],
+          "identityValidationExpression": "^<APP_CLIENT_ID>$",
+          "type": "cognito_user_pools"
+        }
+      }
+    }
+  }
+}
