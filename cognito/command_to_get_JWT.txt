@@ -1,5 +1,7 @@
 # Use this command to authenticate a user against your Cognito User Pool
 # and get tokens back. Run it where the AWS Command Line Interface (CLI) is installed.
+# IMPORTANT: make sure USER_PASSWORD_AUTH is allowed by your app client: 
+#            Go Cognito > your_user_pool > Applications > App clients > your_app_client > App client information > edit > check ALLOW_USER_PASSWORD_AUTH.
 # IMPORTANT: when you replace the <PLACEHOLDER> values below, DO NOT wrap them in quotes.
 
 #******************* COMMAND BELOW *******************#
