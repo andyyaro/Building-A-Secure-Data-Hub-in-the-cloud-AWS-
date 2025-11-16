@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Signing you in…</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- NEW: same import map -->
+    <script type="importmap">
+      {
+        "imports": {
+          "jwt-decode": "https://cdn.jsdelivr.net/npm/jwt-decode@4.0.0/build/esm/index.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <p>Completing sign-in…</p>
+
+    <script type="module">
+      import { userManager } from "./main.js";
+
+      userManager
+        .signinCallback()
+        .then((user) => {
+          console.log("User signed in:", user);
+          window.location.href = "/index.html";
+        })
+        .catch((err) => {
+          console.error("Error in signinCallback:", err);
+          document.body.innerHTML =
+            "<p>Error completing sign-in. Check the console for details.</p>";
+        });
+    </script>
+  </body>
+</html>
