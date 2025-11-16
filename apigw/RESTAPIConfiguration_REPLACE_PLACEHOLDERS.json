@@ -58,9 +58,9 @@
         "x-amazon-apigateway-authtype": "cognito_user_pools",
         "x-amazon-apigateway-authorizer": {
           "providerARNs": [
-            "arn:aws:cognito-idp:<REGION>:<ACCOUNT_ID>:userpool/<USER_POOL_ID>"
+            "arn:aws:cognito-idp:<REGION>:<ACCOUNT_ID>:userpool/<COGNITO_USER_POOL_ID>"
           ],
-          "identityValidationExpression": "^<APP_CLIENT_ID>$",
+          "identityValidationExpression": "^<COGNITO_APP_CLIENT_ID>$",
           "type": "cognito_user_pools"
         }
       }
