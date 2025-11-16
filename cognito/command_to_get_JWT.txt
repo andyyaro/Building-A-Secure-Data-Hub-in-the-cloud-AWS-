@@ -1,0 +1,31 @@
+# Use this command to authenticate a user against your Cognito User Pool
+# and get tokens back. Run it where the AWS Command Line Interface (CLI) is installed.
+# IMPORTANT: when you replace the <PLACEHOLDER> values below, DO NOT wrap them in quotes.
+
+#******************* COMMAND BELOW *******************#
+
+aws cognito-idp initiate-auth \ 
+  --profile <YOUR_PROFILE_OR_REMOVE_LINE> \ 
+  --region <REGION> \ 
+  --client-id <YOUR_APP_CLIENT_ID> \ 
+  --auth-flow USER_PASSWORD_AUTH \ 
+  --auth-parameters 'USERNAME=<YOUR_USERNAME>,PASSWORD=<YOUR_PASSWORD>'
+
+#******************* COMMAND WALKTHROUGH BELOW *******************#
+  
+aws cognito-idp initiate-auth \
+  # Optional: name of the AWS CLI profile in ~/.aws/credentials.
+  # Remove this entire line if you want to use the default profile.
+  --profile <YOUR_PROFILE_OR_REMOVE_LINE> \
+  # AWS Region where your Cognito User Pool and app client are created (for example us-east-1).
+  # Replace <REGION> with the region name only (no quotation marks).
+  --region <REGION> \
+  # The App Client ID of your Cognito User Pool (must allow USER_PASSWORD_AUTH).
+  # Replace <YOUR_APP_CLIENT_ID> with the client ID string only (no quotation marks).
+  --client-id <YOUR_APP_CLIENT_ID> \
+  # Authentication flow: here we use username and password authentication.
+  --auth-flow USER_PASSWORD_AUTH \
+  # Credentials of the user you want to authenticate.
+  # Replace <YOUR_USERNAME> and <YOUR_PASSWORD> with real values, without quotation marks.
+  # The single quotes around the whole string must stay as they are.
+  --auth-parameters 'USERNAME=<YOUR_USERNAME>,PASSWORD=<YOUR_PASSWORD>'
