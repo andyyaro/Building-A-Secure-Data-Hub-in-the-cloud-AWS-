@@ -60,7 +60,7 @@ def retrieve_client_info(temp_credentials):
     table_count = table_scan['Count']
     table_items = table_scan['Items']
 
-    print(f"Successfully retrieved {table_count} items from {CLIENTS_SUMMARY_TABLE_NAME}.")
+    print(f"Successfully retrieved {table_count} Items from {CLIENTS_SUMMARY_TABLE_NAME}.")
 
     return table_items, table_count
 
@@ -76,8 +76,9 @@ def lambda_handler(event, context):
         dict: A dictionary containing the status code, count of items, and items retrieved from the DynamoDB table.
     """
     temp_credentials=assume_role_in_data_account()
-    table_count=retrieve_client_info(temp_credentials)[1]
-    table_items=retrieve_client_info(temp_credentials)[0]
+    table_scan_tuple=retrieve_client_info(temp_credentials)
+    table_count=table_scan_tuple[1]
+    table_items=table_scan_tuple[0]
 
     print("Lambda context (for debugging):")
     print(context)
