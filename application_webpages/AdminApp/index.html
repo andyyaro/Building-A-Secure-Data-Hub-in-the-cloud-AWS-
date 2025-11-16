@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Admin – Client Profiles</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Import map for jwt-decode used by oidc-client-ts -->
+    <script type="importmap">
+      {
+        "imports": {
+          "jwt-decode": "https://cdn.jsdelivr.net/npm/jwt-decode@4.0.0/build/esm/index.js"
+        }
+      }
+    </script>
+
+    <style>
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #f3f4f6;
+      }
+
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        background: #111827;
+        color: #f9fafb;
+      }
+
+      #userInfo {
+        font-size: 0.9rem;
+        opacity: 0.9;
+        margin-right: 0.75rem;
+      }
+
+      .btn {
+        border: none;
+        padding: 0.4rem 0.9rem;
+        border-radius: 999px;
+        cursor: pointer;
+        font-size: 0.85rem;
+      }
+
+      #signIn {
+        background: #10b981;
+        color: #022c22;
+        margin-left: 0.5rem;
+      }
+
+      #signOut {
+        background: #ef4444;
+        color: #fee2e2;
+        margin-left: 0.5rem;
+      }
+
+      main {
+        max-width: 1200px;
+        margin: 1.5rem auto 2.5rem;
+        padding: 0 1rem;
+      }
+
+      #status {
+        margin-bottom: 1.5rem;
+        color: #4b5563;
+        font-size: 1rem;
+      }
+
+      /* Card grid */
+      #cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+        gap: 1.5rem;
+        justify-content: center;
+      }
+
+      /* 500 x 500 card, as per mockup */
+      .card {
+        width: 500px;
+        height: 500px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 24px;
+        border: 3px solid #000000;
+        box-sizing: border-box;
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .card-photo-frame {
+        flex: 1;
+        width: 100%;
+        border: 3px solid #000000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 32px;
+      }
+
+      .card-photo {
+        width: 40%;
+        max-width: 200px;
+        height: auto;
+        display: block;
+      }
+
+      .card-footer {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        font-size: 1.25rem;
+      }
+
+      .client-name,
+      .client-id {
+        font-weight: 500;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <div>
+        <strong>Admin – Client Profiles</strong>
+      </div>
+      <div>
+        <span id="userInfo"></span>
+        <button id="signOut" class="btn">Sign Out</button>
+        <button id="signIn" class="btn">Sign In</button>
+      </div>
+    </header>
+
+    <main>
+      <p id="status">Checking sign-in status…</p>
+
+      <section id="cards"></section>
+
+      <!-- Card template in 500x500 layout -->
+      <template id="card-template">
+        <article class="card">
+          <div class="card-photo-frame">
+            <img
+              src="/cards-person-icon.png"
+              alt="Client icon"
+              class="card-photo"
+            />
+          </div>
+          <div class="card-footer">
+            <span class="client-name"></span>
+            <span class="client-id"></span>
+          </div>
+        </article>
+      </template>
+    </main>
+
+    <script type="module">
+      import { userManager, signOutRedirect } from "./main.js";
+
+      const API_URL =
+        "https://dgqu2wabfh.execute-api.us-east-1.amazonaws.com/stage2/admin/list-client-profiles";
+
+      async function init() {
+        const statusEl = document.getElementById("status");
+        const cardsContainer = document.getElementById("cards");
+        const template = document.getElementById("card-template");
+        const userInfo = document.getElementById("userInfo");
+        const signInBtn = document.getElementById("signIn");
+        const signOutBtn = document.getElementById("signOut");
+
+        // Wire up buttons (if present)
+        if (signInBtn) {
+          signInBtn.addEventListener("click", async () => {
+            await userManager.signinRedirect();
+          });
+        }
+
+        if (signOutBtn) {
+          signOutBtn.addEventListener("click", async () => {
+            await signOutRedirect();
+          });
+        }
+
+        // Get the current user (if already signed in)
+        let user = await userManager.getUser();
+
+        if (!user) {
+          statusEl.textContent =
+            "You are not signed in. Click 'Sign In' to authenticate.";
+          userInfo.textContent = "";
+          return;
+        }
+
+        // User is authenticated
+        userInfo.textContent = `Signed in as: ${
+          user.profile?.email ?? "(no email)"
+        }`;
+        statusEl.textContent = "Loading clients…";
+
+        try {
+          // We intentionally use the ID token here
+          const idToken = user.id_token;
+
+          const response = await fetch(API_URL, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${idToken}`,
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+
+          const data = await response.json();
+
+          const items =
+            typeof data.items === "string" ? JSON.parse(data.items) : data.items;
+
+          if (!Array.isArray(items) || items.length === 0) {
+            statusEl.textContent = "No clients found.";
+            return;
+          }
+
+          statusEl.textContent = `Showing ${items.length} clients.`;
+
+          items.forEach((client) => {
+            const clone = template.content.cloneNode(true);
+
+            const fullName = `${client.firstName ?? ""} ${
+              client.lastName ?? ""
+            }`.trim();
+
+            clone.querySelector(".client-name").textContent = fullName || "(no name)";
+            clone.querySelector(
+              ".client-id"
+            ).textContent = `ID: ${client.id ?? "N/A"}`;
+
+            cardsContainer.appendChild(clone);
+          });
+        } catch (err) {
+          console.error(err);
+          statusEl.textContent = "Error loading clients: " + err.message;
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", init);
+    </script>
+  </body>
+</html>
