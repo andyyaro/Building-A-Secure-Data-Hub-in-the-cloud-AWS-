@@ -23,11 +23,11 @@ Be sure to:
 DATA_ACCOUNT_ROLE_ARN = os.environ["DATA_ACCOUNT_ROLE_ARN"]
 # Example: arn:aws:iam::123456789012:role/service-role/LambdaFunctionForBaseTable_Client-role-a1bcdefg 
 
-CLIENTS_TABLE_NAME = os.environ.get("CLIENTS_TABLE_NAME", "ClientsBase")
+CLIENTS_TABLE_NAME = os.environ.get("CLIENTS_TABLE_NAME")
 
-KMS_KEY_ALIAS = os.environ.get("KMS_KEY_ALIAS", "alias/DemoKeyClientsBase")
-# Example default: "alias/DemoKeyClientsBase".
-# Remember to keep prefix "alias/" before the name of your KMS customer managed key.
+KMS_KEY_ALIAS = os.environ.get("KMS_KEY_ALIAS")
+# IMPORTANT: Remember to keep prefix "alias/" before the name of your KMS customer managed key.
+# Example  : alias/DemoKeyClientsBase .
 
 AWS_REGION = os.environ.get("AWS_REGION", "us-east-1")
 # For Lambda, this is usually already set by the platform (for example, "us-east-1").
@@ -174,7 +174,7 @@ def lambda_handler(event, context):
 #   AwsKmsCryptographicMaterialsProvider.
 #
 # - Here is note on class definition for the AwsKmsCryptographicMaterialsProvider 
-# - directly from the encryption sdk lib:
+# - directly from the encryption sdk lib under lib > python3.14 > site-packages > dynamodb_encryption_sdk > material_providers > aws_kms.py > line133:
 '''    class AwsKmsCryptographicMaterialsProvider(CryptographicMaterialsProvider):
     # pylint: disable=too-many-instance-attributes
     """Cryptographic materials provider for use with the AWS Key Management Service (KMS).
