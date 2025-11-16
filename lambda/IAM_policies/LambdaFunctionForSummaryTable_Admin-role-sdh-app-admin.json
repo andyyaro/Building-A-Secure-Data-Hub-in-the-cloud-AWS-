@@ -1,0 +1,28 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DDB_Scan_SummaryTable",
+      "Effect": "Allow",
+      "Action": "dynamodb:Scan",
+      "Resource": "arn:aws:dynamodb:<REGION>:<ACCOUNT_ID>:table/<SUMMARY_TABLE_NAME>"
+    },
+    {
+      "Sid": "Logs_CreateLogGroup",
+      "Effect": "Allow",
+      "Action": "logs:CreateLogGroup",
+      "Resource": "arn:aws:logs:<REGION>:<ACCOUNT_ID>:*"
+    },
+    {
+      "Sid": "Logs_WriteLambdaLogs",
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": [
+        "arn:aws:logs:<REGION>:<ACCOUNT_ID>:log-group:/aws/lambda/LambdaFunctionForSummaryTable_Admin:*"
+      ]
+    }
+  ]
+}
