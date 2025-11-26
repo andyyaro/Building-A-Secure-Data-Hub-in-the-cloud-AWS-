@@ -3,18 +3,25 @@
 // Import UserManager directly from a CDN ESM build
 import { UserManager } from "https://cdnjs.cloudflare.com/ajax/libs/oidc-client-ts/3.3.0/esm/oidc-client-ts.min.js";
 
-const cognitoDomain =
-  "https://us-east-1kbtkse7wb.auth.us-east-1.amazoncognito.com";
+// Hosted UI domain for your Cognito User Pool
+const cognitoDomain = "https://<YOUR_COGNITO_HOSTED_UI_DOMAIN>";
 
+// Core Cognito / OIDC config
 const cognitoAuthConfig = {
-  authority: "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_KbTkSe7WB",
-  client_id: "oi3e134tcglfb3f90mkeqami1",
+  // Cognito User Pool issuer URL
+  authority: "https://cognito-idp.<YOUR_AWS_REGION>.amazonaws.com/<YOUR_USER_POOL_ID>",
+
+  // App client ID (no client secret for SPA)
+  client_id: "<YOUR_APP_CLIENT_ID>",
+
   // IMPORTANT: must match callback URL configured in Cognito
-  redirect_uri: "https://admin.bytechisel.com/callback.html",
+  redirect_uri: "https://<YOUR_ADMIN_APP_DOMAIN>/callback.html",
+
   response_type: "code",
   scope: "email openid phone",
+
   // Where you want to land after logout
-  post_logout_redirect_uri: "https://admin.bytechisel.com/",
+  post_logout_redirect_uri: "https://<YOUR_ADMIN_APP_DOMAIN>/",
 };
 
 // Create a UserManager instance that other scripts can import
