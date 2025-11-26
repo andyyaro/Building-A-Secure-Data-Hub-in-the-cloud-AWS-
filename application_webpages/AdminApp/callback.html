@@ -5,7 +5,7 @@
     <title>Signing you in…</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- NEW: same import map -->
+    <!-- Import map for jwt-decode used by oidc-client-ts -->
     <script type="importmap">
       {
         "imports": {
@@ -24,7 +24,8 @@
         .signinCallback()
         .then((user) => {
           console.log("User signed in:", user);
-          window.location.href = "/index.html";
+          // Redirect to your admin app's main page after successful sign-in
+          window.location.href = "/<YOUR_ADMIN_HOME_PAGE>";
         })
         .catch((err) => {
           console.error("Error in signinCallback:", err);
