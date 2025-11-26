@@ -145,9 +145,9 @@ def lambda_handler(event, context):
     }
 
 
-# ---------------------------------------------------------------------------
+# 
 # Notes on boto3.Session vs botocore.session.Session and the Encryption SDK
-# ---------------------------------------------------------------------------
+# 
 
 # - boto3.Session is built on top of botocore.session.Session.
 #   (boto3 wraps a botocore session internally as `session._session`.)
