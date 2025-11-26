@@ -163,8 +163,9 @@
     <script type="module">
       import { userManager, signOutRedirect } from "./main.js";
 
+      // API Gateway invoke URL for listing client profiles
       const API_URL =
-        "https://dgqu2wabfh.execute-api.us-east-1.amazonaws.com/stage2/admin/list-client-profiles";
+        "https://<YOUR_API_ID>.execute-api.<YOUR_AWS_REGION>.amazonaws.com/<YOUR_STAGE_NAME>/admin/list-client-profiles";
 
       async function init() {
         const statusEl = document.getElementById("status");
@@ -237,7 +238,8 @@
               client.lastName ?? ""
             }`.trim();
 
-            clone.querySelector(".client-name").textContent = fullName || "(no name)";
+            clone.querySelector(".client-name").textContent =
+              fullName || "(no name)";
             clone.querySelector(
               ".client-id"
             ).textContent = `ID: ${client.id ?? "N/A"}`;
