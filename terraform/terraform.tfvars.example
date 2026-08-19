@@ -1,0 +1,13 @@
+# Copy to terraform.tfvars and fill in. Never commit the filled-in copy.
+
+region  = "us-east-1"
+project = "sdh"
+
+app_account_id  = "000000000000"
+data_account_id = "000000000000"
+
+# Role Terraform assumes to build resources in the data account.
+data_account_deploy_role_arn = "arn:aws:iam::000000000000:role/terraform-deploy"
+
+# Exact origin of the client portal. Never "*".
+client_portal_origin = "https://portal.example.com"

@@ -35,6 +35,26 @@ jobs:
       - name: Run tests
         run: pytest -q
 
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.13.3
+
+      - name: Check formatting
+        run: terraform fmt -check -recursive terraform/
+
+      # -backend=false: this validates the configuration without needing state or
+      # credentials, so it runs on every pull request from a fork.
+      - name: Initialise without a backend
+        run: terraform -chdir=terraform init -backend=false -input=false
+
+      - name: Validate
+        run: terraform -chdir=terraform validate
+
   secrets:
     runs-on: ubuntu-latest
     steps:
