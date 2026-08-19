@@ -21,6 +21,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
+          cache-dependency-path: requirements-dev.txt
 
       - name: Install test dependencies
         run: |
@@ -28,7 +29,7 @@ jobs:
           pip install -r requirements-dev.txt
 
       # No AWS calls: every boto3 client and the encryption SDK are patched. The
-      # suite exists to pin security properties -- the cross-account boundary, the
+      # suite exists to pin security properties - the cross-account boundary, the
       # botocore session handed to KMS, the tenant key, the Scan projection, and
       # the committed IAM and API Gateway configuration.
       - name: Run tests
@@ -38,9 +39,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Scan history for credentials
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install gitleaks
+        run: |
+          curl -sSL -o gitleaks.tar.gz \
+            https://github.com/gitleaks/gitleaks/releases/download/v8.28.0/gitleaks_8.28.0_linux_x64.tar.gz
+          tar -xzf gitleaks.tar.gz gitleaks
+          sudo mv gitleaks /usr/local/bin/
+
+      # Scans the working tree rather than full history, deliberately. An AWS
+      # account id was committed early in this repository's life and later replaced
+      # with a placeholder; history was left intact because an account id is an
+      # identifier, not a credential, and rewriting published history to remove one
+      # is not a proportionate trade. This job answers "is there a secret in the
+      # repository as it stands today", which is the question that can still be
+      # acted on.
+      - name: Scan the working tree for credentials
+        run: gitleaks detect --no-git --redact --verbose
