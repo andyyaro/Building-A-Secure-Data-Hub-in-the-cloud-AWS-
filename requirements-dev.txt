@@ -1,0 +1,6 @@
+# Test-only dependencies. The Lambda runtime gets boto3 from the platform and the
+# encryption SDK from the layer in lambda/ddb-encryption-layer.zip; both are listed
+# here so the handlers import for real under test rather than against stubs.
+pytest>=8.0
+boto3>=1.34
+dynamodb-encryption-sdk>=3.3.0

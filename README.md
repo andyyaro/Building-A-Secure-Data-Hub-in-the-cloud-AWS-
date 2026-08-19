@@ -27,11 +27,19 @@ The IAM policies are split to match that boundary:
 |---|---|---|
 | `...-role-sdh-app-client` | Application | CloudWatch Logs, plus `sts:AssumeRole` on **one** role ARN |
 | `...-role-sdh-data` | Data | `dynamodb:GetItem`, `dynamodb:DescribeTable` on **one** table ARN |
-| `...-role-sdh-app-admin` | Application | CloudWatch Logs, plus `sts:AssumeRole` on one role ARN |
+| `...-role-sdh-app-admin` | Application | CloudWatch Logs, plus `dynamodb:Scan` on the summary table — **see the note below** |
 | `...-role-blue-sdh-data` | Data | Scan on the summary table only |
 
 Each is scoped to a single resource ARN rather than a wildcard. The client path can read exactly
 one item type from exactly one table, and nothing else.
+
+> **Known gap in the admin path.** The admin *app-account* policy above is a near-duplicate of the
+> admin *data-account* policy: it grants `dynamodb:Scan` directly and omits the `sts:AssumeRole`
+> that `LambdaFunctionForSummaryTable_Admin.py` actually calls. So the admin path does not currently
+> enforce the account boundary the client path does, and as committed the handler would fail with
+> AccessDenied on `assume_role`. This is pinned by a strict `xfail` test in
+> `tests/test_iam_policies.py` so it stays visible rather than forgotten. The fix is a change to the
+> deployed policy in AWS followed by a re-export, not an edit to the JSON here.
 
 ### 2. The tenant identifier never comes from the caller
 
