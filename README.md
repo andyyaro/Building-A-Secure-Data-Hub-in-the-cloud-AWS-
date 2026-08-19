@@ -40,6 +40,7 @@ one item type from exactly one table, and nothing else.
 > AccessDenied on `assume_role`. This is pinned by a strict `xfail` test in
 > `tests/test_iam_policies.py` so it stays visible rather than forgotten. The fix is a change to the
 > deployed policy in AWS followed by a re-export, not an edit to the JSON here.
+> Step-by-step: [`docs/FIX_ADMIN_ROLE_POLICY.md`](docs/FIX_ADMIN_ROLE_POLICY.md).
 
 ### 2. The tenant identifier never comes from the caller
 
