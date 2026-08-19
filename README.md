@@ -33,14 +33,20 @@ The IAM policies are split to match that boundary:
 Each is scoped to a single resource ARN rather than a wildcard. The client path can read exactly
 one item type from exactly one table, and nothing else.
 
-> **Known gap in the admin path.** The admin *app-account* policy above is a near-duplicate of the
-> admin *data-account* policy: it grants `dynamodb:Scan` directly and omits the `sts:AssumeRole`
-> that `LambdaFunctionForSummaryTable_Admin.py` actually calls. So the admin path does not currently
-> enforce the account boundary the client path does, and as committed the handler would fail with
-> AccessDenied on `assume_role`. This is pinned by a strict `xfail` test in
-> `tests/test_iam_policies.py` so it stays visible rather than forgotten. The fix is a change to the
-> deployed policy in AWS followed by a re-export, not an edit to the JSON here.
-> Step-by-step: [`docs/FIX_ADMIN_ROLE_POLICY.md`](docs/FIX_ADMIN_ROLE_POLICY.md).
+> **Export defect in the admin path.** The admin *app-account* policy file above has the shape of
+> the *data-account* policy — `dynamodb:Scan` on the summary table, and no `sts:AssumeRole`. Since
+> the handler assumes a role and never calls DynamoDB with its own credentials, that cannot be what
+> the execution role really carries: the data-account policy appears to have been exported twice
+> under two names.
+>
+> Checked against the live data account on 2026-08-19: both data-side roles are correct — the client
+> role has `GetItem`/`DescribeTable` on `ClientsBase` and **no** `Scan`, the admin role has `Scan` on
+> `ClientsSummary` only, and the data-side trust policy correctly names the app-account role. The
+> app account was not reachable, so the live app-side policy is still unverified.
+>
+> Pinned by a strict `xfail` in `tests/test_iam_policies.py` so it stays visible. Resolution is to
+> read the app-account policy and re-export this file from it — see
+> [`docs/FIX_ADMIN_ROLE_POLICY.md`](docs/FIX_ADMIN_ROLE_POLICY.md).
 
 ### 2. The tenant identifier never comes from the caller
 

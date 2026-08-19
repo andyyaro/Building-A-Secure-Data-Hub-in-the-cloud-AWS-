@@ -2,6 +2,22 @@
 
 **Status:** open · pinned by a `strict=True` xfail in `tests/test_iam_policies.py`
 
+## What was verified live (2026-08-19)
+
+The **data account** was reachable and is correct. Both roles match the design:
+
+| Role | Live inline policy | Verdict |
+|---|---|---|
+| `LambdaFunctionForBaseTable_Client-role-*` | `dynamodb:GetItem`, `dynamodb:DescribeTable` on `table/ClientsBase` — **no Scan, no Query** | correct |
+| `LambdaFunctionForSummaryTable_Admin-role-*` | `dynamodb:Scan` on `table/ClientsSummary` only | correct |
+
+The data-side trust policy correctly names the app-account role as the sole principal, so the
+cross-account boundary is real and working in that direction.
+
+The **app account was not reachable** with the credentials available, so the live app-side
+execution-role policy is still unverified. Everything below is therefore about a *file in this
+repository*, which is demonstrably wrong, rather than a confirmed live misconfiguration.
+
 ## The problem
 
 `lambda/IAM_policies/LambdaFunctionForSummaryTable_Admin-role-sdh-app-admin.json` is the policy

@@ -90,14 +90,20 @@ def test_client_app_account_role_cannot_touch_data_directly(repo_root):
 @pytest.mark.xfail(
     strict=True,
     reason=(
-        "KNOWN GAP, left visible rather than papered over. The admin app-account "
-        "policy is a near-duplicate of the admin DATA-account policy: it grants "
-        "dynamodb:Scan directly and omits the sts:AssumeRole that "
-        "LambdaFunctionForSummaryTable_Admin.py actually calls. As committed, that "
-        "handler would fail with AccessDenied on assume_role, and the grant it does "
-        "carry bypasses the account boundary the client path enforces. Fixing it is "
-        "a deliberate change to the deployed policy, not a test edit -- so this stays "
-        "xfail until the policy is corrected in AWS and re-exported."
+        "The committed file is a bad export, not a confirmed live misconfiguration. "
+        "LambdaFunctionForSummaryTable_Admin-role-sdh-app-admin.json is byte-for-byte "
+        "the shape of the DATA-account policy: dynamodb:Scan on the summary table, no "
+        "sts:AssumeRole. Since the handler assumes a role and never calls DynamoDB "
+        "with its own credentials, that content cannot be what the app-account "
+        "execution role actually carries -- it looks like the data-account policy was "
+        "exported twice under two names. "
+        "Verified live 2026-08-19 against the data account: both data-side roles are "
+        "correct (client = GetItem/DescribeTable on ClientsBase with no Scan; admin = "
+        "Scan on ClientsSummary only), and the data-side trust policy correctly names "
+        "the app-account role. The app account was not reachable with available "
+        "credentials, so the live app-side policy remains unverified. "
+        "Stays xfail until the app-account policy is read and the file re-exported "
+        "from it."
     ),
 )
 def test_admin_app_account_role_cannot_touch_data_directly(repo_root):
