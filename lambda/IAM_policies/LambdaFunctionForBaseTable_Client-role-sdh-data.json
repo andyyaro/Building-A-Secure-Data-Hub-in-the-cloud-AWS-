@@ -8,12 +8,12 @@
                 "dynamodb:GetItem",
                 "dynamodb:DescribeTable"
             ],
-            "Resource": "arn:aws:dynamodb:us-east-1:204687258468:table/ClientsBase"
+            "Resource": "arn:aws:dynamodb:us-east-1:<ACCOUNT_ID>:table/ClientsBase"
         },
         {
             "Effect": "Allow",
             "Action": "logs:CreateLogGroup",
-            "Resource": "arn:aws:logs:us-east-1:204687258468:*"
+            "Resource": "arn:aws:logs:us-east-1:<ACCOUNT_ID>:*"
         },
         {
             "Effect": "Allow",
@@ -22,7 +22,7 @@
                 "logs:PutLogEvents"
             ],
             "Resource": [
-                "arn:aws:logs:us-east-1:204687258468:log-group:/aws/lambda/LambdaFunctionForBaseTable_Client:*"
+                "arn:aws:logs:us-east-1:<ACCOUNT_ID>:log-group:/aws/lambda/LambdaFunctionForBaseTable_Client:*"
             ]
         }
     ]
