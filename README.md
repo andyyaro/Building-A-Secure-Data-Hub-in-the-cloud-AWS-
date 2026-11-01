@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/assets/brand/lockup/lockup-color.svg" alt="Secure Data Hub" width="334">
+</p>
+
 # Secure Data Hub — a multi-account AWS architecture for sensitive client data
 
 A serverless reference build for storing and serving client PII across **separate AWS accounts**,
