@@ -1,0 +1,130 @@
+<!doctype html>
+<html
+  lang="en"
+  data-composition-variables='[
+  {"id":"color-ground","type":"color","label":"Ground","default":"#E6ECEF"},
+  {"id":"color-ink","type":"color","label":"Ink","default":"#0E2433"},
+  {"id":"color-green","type":"color","label":"Green","default":"#0F9D74"},
+  {"id":"color-red","type":"color","label":"Red","default":"#D64545"}
+]'
+>
+  <head>
+    <meta charset="utf-8" />
+    <title>Secure Data Hub: launch film</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <script src="assets/vo.js"></script>
+    <script src="assets/timing.js"></script>
+    <style>
+      @font-face { font-family: "Geist"; src: url("assets/fonts/Geist-Regular.woff2") format("woff2"); font-weight: 400; }
+      @font-face { font-family: "Geist"; src: url("assets/fonts/Geist-Medium.woff2") format("woff2"); font-weight: 500; }
+      @font-face { font-family: "Geist"; src: url("assets/fonts/Geist-SemiBold.woff2") format("woff2"); font-weight: 600; }
+      @font-face { font-family: "Geist"; src: url("assets/fonts/Geist-Bold.woff2") format("woff2"); font-weight: 700; }
+      @font-face { font-family: "Chakra Petch"; src: url("assets/fonts/ChakraPetch-600.woff2") format("woff2"); font-weight: 600; }
+      @font-face { font-family: "Chakra Petch"; src: url("assets/fonts/ChakraPetch-700.woff2") format("woff2"); font-weight: 700; }
+      @font-face { font-family: "Montserrat"; src: url("assets/fonts/Montserrat-SemiBold.woff2") format("woff2"); font-weight: 600; }
+
+      :root {
+        --ground: #e6ecef;
+        --ink: #0e2433;
+        --ink-70: rgba(14, 36, 51, 0.72);
+        --ink-55: rgba(14, 36, 51, 0.64);
+        --ink-15: rgba(14, 36, 51, 0.15);
+        --ink-06: rgba(14, 36, 51, 0.06);
+        --green: #0f9d74;
+        --green-text: #0b8562;
+        --green-soft: #d3ebe3;
+        --red: #d64545;
+        --red-soft: #f5dcda;
+        --white: #ffffff;
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { background: var(--ground); }
+      #main {
+        position: relative; width: 1920px; height: 1080px; overflow: hidden;
+        color: var(--ink); font-family: "Geist", sans-serif; -webkit-font-smoothing: antialiased;
+      }
+
+      /* the ground: the brand's light grey-blue, a faint blueprint dot grid, one soft white light that travels */
+      #bg { position: absolute; inset: 0; background: var(--ground); overflow: hidden; }
+      #dots {
+        position: absolute; inset: 0; opacity: 0.55;
+        background-image: radial-gradient(circle, rgba(14, 36, 51, 0.16) 1.5px, rgba(14, 36, 51, 0) 2.2px);
+        background-size: 40px 40px; background-position: 20px 20px;
+        -webkit-mask-image: radial-gradient(ellipse 75% 70% at 50% 50%, #000 20%, rgba(0, 0, 0, 0) 85%);
+        mask-image: radial-gradient(ellipse 75% 70% at 50% 50%, #000 20%, rgba(0, 0, 0, 0) 85%);
+      }
+      #glow {
+        position: absolute; left: -800px; top: -800px; width: 1600px; height: 1600px; border-radius: 50%;
+        background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.55) 30%,
+          rgba(255, 255, 255, 0.18) 52%, rgba(255, 255, 255, 0) 70%);
+      }
+
+      /* shared parts, used by every scene. No monospace anywhere (Andy's rule): code words are set in Geist Medium. */
+      .kick { position: absolute; font-family: "Geist", sans-serif; font-weight: 600; font-size: 28px; letter-spacing: -0.005em; color: var(--ink-55); white-space: nowrap; }
+      .kick b { font-weight: 600; color: var(--green-text); }
+      .head { position: absolute; font-family: "Geist", sans-serif; font-weight: 600; font-size: 72px; letter-spacing: -0.032em; line-height: 1.05; color: var(--ink); white-space: nowrap; }
+      .head .w { display: inline-block; }
+      .sub { position: absolute; font-family: "Geist", sans-serif; font-weight: 400; font-size: 32px; line-height: 1.35; color: var(--ink-70); white-space: nowrap; }
+      .lab { position: absolute; font-family: "Montserrat", sans-serif; font-weight: 600; font-size: 17px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-55); white-space: nowrap; }
+      .box { position: absolute; border: 5px solid var(--ink); border-radius: 40px; background: rgba(255, 255, 255, 0.42); }
+      .node {
+        position: absolute; display: flex; align-items: center; justify-content: center; gap: 18px;
+        background: var(--white); border: 4px solid var(--ink); border-radius: 22px;
+        font-family: "Geist", sans-serif; font-weight: 600; font-size: 30px; letter-spacing: -0.015em; color: var(--ink); white-space: nowrap;
+      }
+      .node.dash { border-style: dashed; border-color: var(--ink-55); color: var(--ink-70); background: rgba(255, 255, 255, 0.6); }
+      .node .s { display: block; font-weight: 400; font-size: 21px; letter-spacing: 0; color: var(--ink-55); margin-top: 4px; }
+      .cw { position: absolute; display: flex; justify-content: center; }
+      .chip { display: inline-block; font-family: "Geist", sans-serif; font-weight: 500; font-size: 22px; padding: 9px 16px; border-radius: 12px; background: var(--ink-06); color: var(--ink); white-space: nowrap; }
+      .chip.g { background: var(--green-soft); color: #0b6e52; }
+      .chip.r { background: var(--red-soft); color: #a83232; }
+      .hl { position: absolute; height: 4px; border-radius: 2px; background: var(--green); transform-origin: 0% 50%; }
+      .vl { position: absolute; width: 4px; border-radius: 2px; background: var(--green); transform-origin: 50% 0%; }
+      .dash-seg { position: absolute; background: var(--red); border-radius: 2px; }
+      .dot { position: absolute; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 7px rgba(15, 157, 116, 0.18); }
+      .deny {
+        position: absolute; width: 48px; height: 48px; margin: -24px 0 0 -24px; border-radius: 50%; background: var(--red);
+        display: flex; align-items: center; justify-content: center;
+      }
+      .num { font-family: "Chakra Petch", sans-serif; font-weight: 700; }
+    </style>
+  </head>
+  <body>
+    <div id="main" data-composition-id="main" data-start="0" data-duration="62.5" data-width="1920" data-height="1080">
+      <div id="bg">
+        <div id="dots"></div>
+        <div id="glow" data-layout-allow-overflow></div>
+      </div>
+
+      <audio id="soundtrack" class="clip" src="assets/audio/mix.wav" data-start="0" data-duration="62.5" data-track-index="0" data-volume="1"></audio>
+
+      <div id="s1-open" data-composition-id="s1-open" data-composition-src="compositions/s1-open.html" data-start="0" data-duration="19.65" data-track-index="1" data-width="1920" data-height="1080"></div>
+      <div id="s2-accounts" data-composition-id="s2-accounts" data-composition-src="compositions/s2-accounts.html" data-start="19.65" data-duration="9.6" data-track-index="2" data-width="1920" data-height="1080"></div>
+      <div id="s3-token" data-composition-id="s3-token" data-composition-src="compositions/s3-token.html" data-start="29.25" data-duration="9.6" data-track-index="3" data-width="1920" data-height="1080"></div>
+      <div id="s4-key" data-composition-id="s4-key" data-composition-src="compositions/s4-key.html" data-start="38.85" data-duration="10.25" data-track-index="4" data-width="1920" data-height="1080"></div>
+      <div id="s5-tests" data-composition-id="s5-tests" data-composition-src="compositions/s5-tests.html" data-start="49.1" data-duration="4.9" data-track-index="5" data-width="1920" data-height="1080"></div>
+      <div id="s6-end" data-composition-id="s6-end" data-composition-src="compositions/s6-end.html" data-start="53.25" data-duration="9.25" data-track-index="6" data-width="1920" data-height="1080"></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (function () {
+        const TM = window.TM, VO = window.VO;
+        const tl = gsap.timeline({ paused: true });
+        // one soft white light travels behind whatever the frame is about (centre x, y in px; scale)
+        const G = "#glow";
+        const go = (t, x, y, s, d = 1.2) => tl.to(G, { x, y, scale: s, duration: d, ease: "power2.inOut" }, t);
+        gsap.set(G, { x: 1390, y: 560, scale: 0.9, opacity: 0 });
+        tl.to(G, { opacity: 1, duration: 1.4, ease: "power2.out" }, 0.1);
+        go(VO.v03.start - 0.3, 1300, 560, 1.0);              // s1: behind the two accounts
+        go(TM.drop - 1.4, 960, 430, 1.15, 1.3);              // the title: behind the mark
+        go(TM.s2[0] - 0.2, 960, 700, 1.1);                   // s2: behind the cross-account path
+        go(TM.s3[0] - 0.2, 960, 540, 1.0);                   // s3: behind the gateway
+        go(TM.s4[0] - 0.2, 1010, 580, 1.0);                  // s4: behind the key
+        go(VO.v11.start - 0.4, 1060, 620, 1.05);             // s4: behind the two tables
+        go(TM.s5[0] - 0.2, 420, 470, 1.0);                   // s5: behind the 51
+        go(TM.s6[0] - 0.1, 960, 420, 1.15);                  // s6: behind the mark
+        window.__timelines["main"] = tl;
+      })();
+    </script>
+  </body>
+</html>

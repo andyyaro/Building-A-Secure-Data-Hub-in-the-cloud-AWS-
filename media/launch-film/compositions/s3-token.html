@@ -1,0 +1,158 @@
+<template>
+  <style>
+    @font-face { font-family: "Geist"; src: url("assets/fonts/Geist-Regular.woff2") format("woff2"); font-weight: 400; }
+    @font-face { font-family: "Geist"; src: url("assets/fonts/Geist-Medium.woff2") format("woff2"); font-weight: 500; }
+    @font-face { font-family: "Geist"; src: url("assets/fonts/Geist-SemiBold.woff2") format("woff2"); font-weight: 600; }
+    @font-face { font-family: "Montserrat"; src: url("assets/fonts/Montserrat-SemiBold.woff2") format("woff2"); font-weight: 600; }
+    #root { position: absolute; inset: 0; }
+    #s3-kick { left: 120px; top: 118px; }
+    #s3-head { left: 120px; top: 160px; }
+    .s3-card { position: absolute; width: 470px; background: var(--white); border: 4px solid var(--ink); border-radius: 24px; }
+    .s3-card .lab { left: 30px; top: 26px; }
+    .s3-row { position: absolute; left: 30px; font-weight: 500; font-size: 26px; color: var(--ink); white-space: nowrap; }
+    .s3-row .k { color: var(--ink-55); }
+    #s3-req { left: 120px; top: 370px; height: 256px; }
+    #s3-r1 { top: 76px; }
+    #s3-r2 { top: 124px; }
+    #s3-r3 { top: 172px; }
+    #s3-strike { position: absolute; left: 26px; top: 190px; width: 246px; height: 4px; border-radius: 2px; background: var(--red); transform-origin: 0% 50%; }
+    #s3-ign { position: absolute; left: 282px; top: 168px; }
+    #s3-tok { left: 120px; top: 664px; height: 276px; }
+    .s3-kv { position: absolute; left: 30px; display: flex; align-items: center; width: 410px; font-weight: 500; font-size: 24px; color: var(--ink-55); white-space: nowrap; }
+    .s3-kv .v { position: absolute; left: 216px; }
+    .s3-bar { display: block; height: 14px; border-radius: 7px; background: var(--ink-15); }
+    #s3-t1 { top: 82px; }
+    #s3-t2 { top: 134px; }
+    #s3-t3 { top: 186px; height: 44px; }
+    #s3-t3 .k { color: var(--ink); }
+    #s3-claim, #s3-miss { top: 0; }
+    #s3-gw { left: 770px; top: 440px; width: 380px; height: 130px; flex-direction: column; gap: 0; }
+    #s3-fn { left: 1440px; top: 455px; width: 360px; height: 100px; }
+    #s3-a1 { left: 594px; top: 496px; width: 172px; background: var(--ink); }
+    #s3-a2 { left: 1154px; top: 503px; width: 282px; }
+    #s3-fly { position: absolute; left: 0; top: 0; }
+    #s3-map { left: 560px; top: 600px; width: 800px; }
+    #s3-400 { left: 560px; top: 600px; width: 800px; }
+    #s3-ev { left: 1400px; top: 582px; width: 440px; }
+    #s3-nev { left: 1400px; top: 582px; width: 440px; }
+  </style>
+  <div id="root" data-composition-id="s3-token" data-width="1920" data-height="1080">
+    <div id="s3-kick" class="kick"><b>Decision 2</b> · The tenant comes from the token</div>
+    <div id="s3-head" class="head">The tenant ID never comes from the caller.</div>
+
+    <div id="s3-a1" class="hl"></div>
+    <div id="s3-a2" class="hl"></div>
+
+    <div id="s3-req" class="s3-card">
+      <div class="lab">The caller's request</div>
+      <div id="s3-r1" class="s3-row">GET /client/profile</div>
+      <div id="s3-r2" class="s3-row"><span class="k">Authorization:</span> Bearer token</div>
+      <div id="s3-r3" class="s3-row"><span class="k">client_id:</span> 9ab3f1</div>
+      <div id="s3-strike"></div>
+      <div id="s3-ign"><span class="chip r">ignored</span></div>
+    </div>
+
+    <div id="s3-tok" class="s3-card">
+      <div class="lab">Verified token · Cognito</div>
+      <div id="s3-t1" class="s3-kv"><span class="k">sub</span><span class="v s3-bar" style="width: 190px"></span></div>
+      <div id="s3-t2" class="s3-kv"><span class="k">email</span><span class="v s3-bar" style="width: 150px"></span></div>
+      <div id="s3-t3" class="s3-kv"><span class="k">custom:client_id</span>
+        <span class="v" id="s3-claim"><span class="chip g">25xwe2</span></span>
+        <span class="v" id="s3-miss"><span class="chip r">missing</span></span>
+      </div>
+    </div>
+
+    <div id="s3-gw" class="node">API Gateway<span class="s">Cognito authorizer</span></div>
+    <div id="s3-fn" class="node">Client Lambda</div>
+
+    <div id="s3-map" class="cw"><span class="chip g">client_id ← claims['custom:client_id']</span></div>
+    <div id="s3-400" class="cw"><span class="chip r">400 · Missing Client Id.</span></div>
+    <div id="s3-ev" class="cw"><span class="chip g">event client_id: 25xwe2</span></div>
+    <div id="s3-nev" class="cw"><span class="chip">never invoked</span></div>
+    <div id="s3-fly" data-layout-allow-overlap><span class="chip g">25xwe2</span></div>
+    <div id="s3-dot" class="dot"></div>
+  </div>
+  <script>
+    (function () {
+      const TM = window.TM, VO = window.VO;
+      const S0 = TM.s3[0], S1 = TM.s3[1];
+      const norm = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
+      const W = (k, w, nth = 0) => {
+        const alts = w.split("|");
+        for (const exact of [true, false]) {
+          let c = 0;
+          for (const x of VO[k].words) {
+            const t = norm(x.w);
+            if (alts.some((a) => (exact ? t === a : t.startsWith(a)))) { if (c === nth) return x.t0 - S0; c++; }
+          }
+        }
+        return VO[k].start - S0;
+      };
+      const F = (t) => t - S0;
+      const INK = "#0E2433", GREEN = "#0F9D74";
+      const tl = gsap.timeline({ paused: true });
+      const rise = (el, t, d = 0.5, dy = 22) =>
+        tl.fromTo(el, { opacity: 0, y: dy, filter: "blur(5px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: d, ease: "power3.out" }, t - 0.04);
+      const fade = (el, t, d = 0.4) => tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: d, ease: "power2.out" }, t);
+      const pop = (el, t, d = 0.45) => tl.fromTo(el, { opacity: 0, scale: 0.86 }, { opacity: 1, scale: 1, duration: d, ease: "back.out(1.7)" }, t);
+      const out = (els, t, d = 0.3) => tl.to(els, { opacity: 0, filter: "blur(5px)", duration: d, ease: "power3.in" }, t);
+
+      const ALL = ["#s3-kick", "#s3-head", "#s3-req", "#s3-tok", "#s3-gw", "#s3-fn", "#s3-map", "#s3-400", "#s3-ev", "#s3-nev", "#s3-fly", "#s3-dot", "#s3-a1", "#s3-a2"];
+      const ROWS = ["#s3-r1", "#s3-r2", "#s3-r3", "#s3-t1", "#s3-t2", "#s3-t3", "#s3-ign", "#s3-miss"];
+      gsap.set(ALL.concat(ROWS), { opacity: 0 });
+      gsap.set(["#s3-a1", "#s3-a2"], { scaleX: 0, opacity: 1 });
+      gsap.set("#s3-strike", { scaleX: 0 });
+      gsap.set("#s3-dot", { x: 1154, y: 505 });
+
+      fade("#s3-kick", 0.1, 0.45);
+      rise("#s3-head", W("v08", "the") - 0.08, 0.55, 20);
+      // the caller's request, with a client_id of its own choosing
+      pop("#s3-req", W("v08", "tenant"));
+      tl.fromTo(["#s3-r1", "#s3-r2", "#s3-r3"], { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out", stagger: 0.1 }, W("v08", "tenant") + 0.15);
+      pop("#s3-gw", W("v08", "id") + 0.1);
+      tl.fromTo("#s3-fn", { opacity: 0, scale: 0.86 }, { opacity: 0.38, scale: 1, duration: 0.45, ease: "back.out(1.7)" }, W("v08", "id") + 0.25);
+      tl.to("#s3-a1", { scaleX: 1, duration: 0.4, ease: "power2.inOut" }, W("v08", "never"));
+      // "never comes from the caller": its own client_id is struck out
+      tl.to("#s3-strike", { scaleX: 1, duration: 0.3, ease: "power2.inOut" }, W("v08", "caller") - 0.1);
+      tl.to("#s3-r3", { opacity: 0.45, duration: 0.3 }, W("v08", "caller"));
+      pop("#s3-ign", W("v08", "caller") + 0.15, 0.4);
+
+      // "the gateway takes it from a verified token": the claim travels into the gateway's mapping
+      tl.fromTo("#s3-gw", { scale: 1 }, { scale: 1.04, duration: 0.2, ease: "power2.out", yoyo: true, repeat: 1 }, W("v09", "gateway"));
+      pop("#s3-tok", W("v09", "takes") - 0.05);
+      tl.fromTo(["#s3-t1", "#s3-t2", "#s3-t3"], { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out", stagger: 0.1 }, W("v09", "takes") + 0.1);
+      tl.to("#s3-tok", { borderColor: GREEN, duration: 0.3 }, W("v09", "verified"));
+      const fly = W("v09", "token");
+      // from the claim's place in the token card (left 120 + 4 + 30 + 216, top 664 + 4 + 186) to under the gateway
+      gsap.set("#s3-fly", { x: 370, y: 854 });
+      tl.set("#s3-fly", { opacity: 1 }, fly);
+      tl.to("#s3-fly", { x: 913, y: 600, duration: 0.55, ease: "power2.inOut" }, fly);
+      tl.to("#s3-fly", { opacity: 0, duration: 0.15 }, fly + 0.5);
+      fade("#s3-map", fly + 0.45, 0.3);
+
+      // "before any code runs": only now does the Lambda get the request, with the tenant set by the gateway
+      const r = W("v09", "runs") - 0.1;
+      tl.to("#s3-a2", { scaleX: 1, duration: 0.4, ease: "power1.inOut" }, r);
+      tl.to("#s3-dot", { opacity: 1, duration: 0.1 }, r);
+      tl.to("#s3-dot", { x: 1436, duration: 0.4, ease: "power1.inOut" }, r);
+      tl.to("#s3-dot", { opacity: 0, duration: 0.1 }, r + 0.4);
+      tl.to("#s3-fn", { opacity: 1, borderColor: GREEN, duration: 0.3 }, r + 0.38);
+      fade("#s3-ev", r + 0.45, 0.35);
+
+      // and when the claim is missing: a 400 at the gateway, and no code runs at all
+      const c = F(VO.v09.end) + 0.5;
+      tl.to("#s3-claim", { opacity: 0, duration: 0.2 }, c);
+      tl.fromTo("#s3-miss", { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(1.7)" }, c + 0.05);
+      tl.to("#s3-tok", { borderColor: INK, duration: 0.3 }, c);
+      tl.to("#s3-map", { opacity: 0, duration: 0.2 }, c + 0.15);
+      pop("#s3-400", c + 0.3, 0.4);
+      tl.to(["#s3-a2"], { opacity: 0.2, duration: 0.3 }, c + 0.4);
+      tl.to("#s3-ev", { opacity: 0, duration: 0.2 }, c + 0.4);
+      tl.to("#s3-fn", { opacity: 0.38, borderColor: INK, duration: 0.3 }, c + 0.45);
+      fade("#s3-nev", c + 0.6, 0.3);
+
+      out(ALL.concat(["#s3-miss"]), S1 - S0 - 0.4, 0.3);
+      window.__timelines["s3-token"] = tl;
+    })();
+  </script>
+</template>

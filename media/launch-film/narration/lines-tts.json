@@ -1,0 +1,15 @@
+{
+ "v01": "One stolen credential.",
+ "v02": "In most apps, that opens every client's record.",
+ "v03": "Here, breaking into the app doesn't expose the data.",
+ "v04": "This is Secure Data Hub.",
+ "v05": "A multi-account A W S architecture for sensitive client data.",
+ "v06": "The app account holds no data access.",
+ "v07": "To read one record, it assumes a role in a separate data account, with temporary credentials.",
+ "v08": "The tenant I D never comes from the caller.",
+ "v09": "The gateway takes it from a verified token, before any code runs.",
+ "v10": "Each record is encrypted with a customer-managed key, used only as the data account.",
+ "v11": "And the admin's broad permission never touches the sensitive table.",
+ "v12": "Fifty-one tests pin these boundaries in place.",
+ "v13": "Secure Data Hub."
+}

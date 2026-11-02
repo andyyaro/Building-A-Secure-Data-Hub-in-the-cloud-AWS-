@@ -1,0 +1,228 @@
+<template>
+  <style>
+    @font-face { font-family: "Geist"; src: url("assets/fonts/Geist-Regular.woff2") format("woff2"); font-weight: 400; }
+    @font-face { font-family: "Geist"; src: url("assets/fonts/Geist-Medium.woff2") format("woff2"); font-weight: 500; }
+    @font-face { font-family: "Geist"; src: url("assets/fonts/Geist-SemiBold.woff2") format("woff2"); font-weight: 600; }
+    @font-face { font-family: "Montserrat"; src: url("assets/fonts/Montserrat-SemiBold.woff2") format("woff2"); font-weight: 600; }
+    #root { position: absolute; inset: 0; }
+    #s4-kick, #s4-kick2 { left: 120px; top: 118px; }
+    #s4-head, #s4-head2 { left: 120px; top: 160px; }
+    /* frame A: the item, the key, and who is allowed to use it */
+    #s4-rec { position: absolute; left: 120px; top: 360px; width: 580px; height: 500px; background: var(--white); border: 4px solid var(--ink); border-radius: 24px; }
+    #s4-rec .lab { left: 30px; top: 28px; }
+    .s4-row { position: absolute; left: 30px; width: 512px; height: 84px; border-top: 2px solid var(--ink-15); display: flex; align-items: center; font-weight: 500; font-size: 26px; color: var(--ink-55); white-space: nowrap; }
+    .s4-row .v { position: absolute; left: 220px; display: flex; align-items: center; gap: 14px; color: var(--ink); }
+    .s4-bar { display: block; height: 16px; border-radius: 8px; background: var(--ink-15); transform-origin: 0% 50%; }
+    .s4-lock { width: 22px; height: 26px; }
+    .s4-plain { position: absolute; left: 220px; font-weight: 600; color: var(--green-text); }
+    #s4-row0 { top: 72px; }
+    #s4-row1 { top: 156px; }
+    #s4-row2 { top: 240px; }
+    #s4-row3 { top: 324px; }
+    #s4-note { position: absolute; left: 30px; top: 428px; font-weight: 500; font-size: 22px; color: var(--green-text); white-space: nowrap; }
+    #s4-kms { left: 820px; top: 500px; width: 380px; height: 130px; }
+    #s4-kms .t { display: flex; flex-direction: column; }
+    #s4-kms svg { width: 54px; height: 54px; }
+    #s4-dr { left: 1400px; top: 515px; width: 400px; height: 100px; }
+    #s4-own { left: 1400px; top: 760px; width: 400px; height: 100px; }
+    #s4-ownsub { left: 1400px; top: 878px; width: 400px; }
+    #s4-g1 { left: 1200px; top: 563px; width: 200px; transform-origin: 100% 50%; }
+    #s4-g2 { left: 700px; top: 563px; width: 120px; transform-origin: 100% 50%; }
+    #s4-deny { left: 1010px; top: 684px; }
+    /* frame B: the admin's Scan and the two tables */
+    #s4-adm { left: 120px; top: 560px; width: 400px; height: 120px; flex-direction: column; gap: 0; }
+    #s4-scan { left: 120px; top: 704px; width: 400px; }
+    .s4-tbl { left: 1240px; width: 560px; height: 140px; justify-content: flex-start; padding-left: 36px; }
+    .s4-tbl .t { display: flex; flex-direction: column; }
+    .s4-tbl svg { width: 56px; height: 56px; overflow: visible; }
+    #s4-sum { top: 420px; }
+    #s4-base { top: 700px; }
+    #s4-p1 { left: 520px; top: 618px; width: 362px; }
+    #s4-p2 { left: 878px; top: 488px; height: 134px; transform-origin: 50% 100%; }
+    #s4-p3 { left: 878px; top: 488px; width: 362px; }
+    #s4-lim { left: 880px; top: 424px; width: 360px; }
+    #s4-deny2 { left: 1240px; top: 770px; }
+    #s4-nog { left: 880px; top: 792px; width: 360px; }
+  </style>
+  <div id="root" data-composition-id="s4-key" data-width="1920" data-height="1080">
+    <div id="s4-kick" class="kick"><b>Decision 3</b> · A customer-managed key</div>
+    <div id="s4-head" class="head">Encrypted with a customer-managed key.</div>
+
+    <div id="s4-g1" class="hl"></div>
+    <div id="s4-g2" class="hl"></div>
+    <div id="s4-dashA"></div>
+
+    <div id="s4-rec">
+      <div class="lab">ClientsBase · one item</div>
+      <div id="s4-row0" class="s4-row">id<span class="v">25xwe2</span></div>
+      <div id="s4-row1" class="s4-row">firstName
+        <span class="v s4-enc"><svg class="s4-lock" viewBox="0 0 22 26"><rect x="1" y="11" width="20" height="14" rx="3" fill="#0E2433" /><path d="M5 11 V7 a6 6 0 0 1 12 0 V11" fill="none" stroke="#0E2433" stroke-width="3" /></svg><span class="s4-bar" style="width: 170px"></span></span>
+        <span class="s4-plain">Ada</span></div>
+      <div id="s4-row2" class="s4-row">lastName
+        <span class="v s4-enc"><svg class="s4-lock" viewBox="0 0 22 26"><rect x="1" y="11" width="20" height="14" rx="3" fill="#0E2433" /><path d="M5 11 V7 a6 6 0 0 1 12 0 V11" fill="none" stroke="#0E2433" stroke-width="3" /></svg><span class="s4-bar" style="width: 230px"></span></span>
+        <span class="s4-plain">Lovelace</span></div>
+      <div id="s4-row3" class="s4-row">signature
+        <span class="v s4-enc"><span class="s4-bar" style="width: 266px"></span></span>
+        <span class="s4-plain">verified</span></div>
+      <div id="s4-note">Decrypted in the Lambda, as the data role</div>
+    </div>
+
+    <div id="s4-kms" class="node">
+      <svg viewBox="0 0 54 54" aria-hidden="true"><circle cx="17" cy="27" r="11" fill="none" stroke="#0F9D74" stroke-width="6" /><rect x="27" y="24" width="25" height="6" rx="2" fill="#0F9D74" /><rect x="42" y="27" width="6" height="12" rx="2" fill="#0F9D74" /></svg>
+      <span class="t">KMS key<span class="s">customer managed, by alias</span></span>
+    </div>
+    <div id="s4-dr" class="node">Assumed data role</div>
+    <div id="s4-own" class="node dash">Lambda's own role</div>
+    <div id="s4-ownsub" class="cw"><span class="chip r">the SDK's silent default</span></div>
+    <div id="s4-deny" class="deny"><svg width="20" height="20" viewBox="0 0 20 20"><path d="M3 3 L17 17 M17 3 L3 17" stroke="#fff" stroke-width="4" stroke-linecap="round" /></svg></div>
+    <div id="s4-dot1" class="dot"></div>
+    <div id="s4-dot2" class="dot"></div>
+
+    <div id="s4-kick2" class="kick"><b>Decision 4</b> · Least privilege for admins</div>
+    <div id="s4-head2" class="head">The broad Scan never touches the PII table.</div>
+    <div id="s4-p1" class="hl"></div>
+    <div id="s4-p2" class="vl"></div>
+    <div id="s4-p3" class="hl"></div>
+    <div id="s4-dashB"></div>
+    <div id="s4-adm" class="node">Admin Lambda<span class="s">its own data role</span></div>
+    <div id="s4-scan" class="cw"><span class="chip">dynamodb:Scan</span></div>
+    <div id="s4-sum" class="node s4-tbl">
+      <svg viewBox="0 0 120 120" aria-hidden="true"><g fill="none" stroke="#0E2433" stroke-width="9">
+        <rect x="13" y="13" width="22" height="22" rx="5" /><rect x="49" y="13" width="22" height="22" rx="5" /><rect x="85" y="13" width="22" height="22" rx="5" />
+        <rect x="13" y="49" width="22" height="22" rx="5" /><rect x="49" y="49" width="22" height="22" rx="5" /><rect x="85" y="49" width="22" height="22" rx="5" />
+        <rect x="13" y="85" width="22" height="22" rx="5" /><rect x="49" y="85" width="22" height="22" rx="5" /><rect x="85" y="85" width="22" height="22" rx="5" /></g></svg>
+      <span class="t">ClientsSummary<span class="s">id, firstName, lastName</span></span>
+    </div>
+    <div id="s4-base" class="node s4-tbl">
+      <svg viewBox="0 0 120 120" aria-hidden="true"><g fill="none" stroke="#0E2433" stroke-width="9">
+        <rect x="13" y="13" width="22" height="22" rx="5" /><rect x="49" y="13" width="22" height="22" rx="5" /><rect x="85" y="13" width="22" height="22" rx="5" />
+        <rect x="13" y="49" width="22" height="22" rx="5" /><rect x="85" y="49" width="22" height="22" rx="5" />
+        <rect x="13" y="85" width="22" height="22" rx="5" /><rect x="49" y="85" width="22" height="22" rx="5" /><rect x="85" y="85" width="22" height="22" rx="5" /></g>
+        <rect id="s4-bctr" x="46" y="46" width="28" height="28" rx="6" fill="#0F9D74" /></svg>
+      <span class="t">ClientsBase<span class="s">encrypted PII, GetItem only</span></span>
+    </div>
+    <div id="s4-lim" class="cw"><span class="chip g">Scan · limit 20</span></div>
+    <div id="s4-deny2" class="deny"><svg width="20" height="20" viewBox="0 0 20 20"><path d="M3 3 L17 17 M17 3 L3 17" stroke="#fff" stroke-width="4" stroke-linecap="round" /></svg></div>
+    <div id="s4-nog" class="cw"><span class="chip r">no grant on this table</span></div>
+    <div id="s4-dot3" class="dot"></div>
+  </div>
+  <script>
+    (function () {
+      const TM = window.TM, VO = window.VO;
+      const S0 = TM.s4[0], S1 = TM.s4[1];
+      const norm = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
+      const W = (k, w, nth = 0) => {
+        const alts = w.split("|");
+        for (const exact of [true, false]) {
+          let c = 0;
+          for (const x of VO[k].words) {
+            const t = norm(x.w);
+            if (alts.some((a) => (exact ? t === a : t.startsWith(a)))) { if (c === nth) return x.t0 - S0; c++; }
+          }
+        }
+        return VO[k].start - S0;
+      };
+      const F = (t) => t - S0;
+      const INK = "#0E2433", GREEN = "#0F9D74";
+      const tl = gsap.timeline({ paused: true });
+      const rise = (el, t, d = 0.5, dy = 22) =>
+        tl.fromTo(el, { opacity: 0, y: dy, filter: "blur(5px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: d, ease: "power3.out" }, t - 0.04);
+      const fade = (el, t, d = 0.4) => tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: d, ease: "power2.out" }, t);
+      const pop = (el, t, d = 0.45) => tl.fromTo(el, { opacity: 0, scale: 0.86 }, { opacity: 1, scale: 1, duration: d, ease: "back.out(1.7)" }, t);
+      const out = (els, t, d = 0.3) => tl.to(els, { opacity: 0, filter: "blur(5px)", duration: d, ease: "power3.in" }, t);
+      // red dashes along a path of horizontal and vertical segments, in drawing order
+      const dashPath = (hostSel, pts) => {
+        const host = document.querySelector(hostSel), segs = [];
+        for (let i = 0; i + 1 < pts.length; i++) {
+          const [x0, y0] = pts[i], [x1, y1] = pts[i + 1];
+          const len = Math.hypot(x1 - x0, y1 - y0), ux = (x1 - x0) / len, uy = (y1 - y0) / len;
+          for (let s = 0; s + 10 <= len; s += 18) {
+            const d = document.createElement("div");
+            d.className = "dash-seg";
+            const x = x0 + ux * s, y = y0 + uy * s;
+            d.style.cssText = ux !== 0
+              ? `left:${Math.min(x, x + ux * 10)}px;top:${y - 2}px;width:10px;height:4px`
+              : `left:${x - 2}px;top:${Math.min(y, y + uy * 10)}px;width:4px;height:10px`;
+            host.appendChild(d); segs.push(d);
+          }
+        }
+        return segs;
+      };
+      const dashA = dashPath("#s4-dashA", [[1396, 810], [1010, 810], [1010, 712]]);
+      const dashB = dashPath("#s4-dashB", [[880, 622], [880, 770], [1218, 770]]);
+
+      const A = ["#s4-kick", "#s4-head", "#s4-rec", "#s4-kms", "#s4-dr", "#s4-own", "#s4-ownsub", "#s4-deny", "#s4-g1", "#s4-g2", "#s4-note", ".s4-plain"];
+      const B = ["#s4-kick2", "#s4-head2", "#s4-adm", "#s4-scan", "#s4-sum", "#s4-base", "#s4-lim", "#s4-deny2", "#s4-nog", "#s4-p1", "#s4-p2", "#s4-p3"];
+      gsap.set(A.concat(B, dashA, dashB, ["#s4-dot1", "#s4-dot2", "#s4-dot3", ".s4-row", ".s4-lock"]), { opacity: 0 });
+      gsap.set(["#s4-g1", "#s4-g2", "#s4-p1", "#s4-p3"], { scaleX: 0, opacity: 1 });
+      gsap.set("#s4-p2", { scaleY: 0, opacity: 1 });
+      gsap.set(".s4-bar", { scaleX: 0 });
+      gsap.set("#s4-bctr", { transformOrigin: "50% 50%" });
+      gsap.set("#s4-dot1", { x: 1400, y: 565 });
+      gsap.set("#s4-dot2", { x: 820, y: 565 });
+      gsap.set("#s4-dot3", { x: 520, y: 620 });
+
+      // ---- frame A: "Each record is encrypted with a customer-managed key, used only as the data account."
+      fade("#s4-kick", 0.15, 0.45);
+      rise("#s4-head", W("v10", "each") - 0.08, 0.55, 20);
+      pop("#s4-rec", W("v10", "record") - 0.05);
+      tl.fromTo(".s4-row", { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out", stagger: 0.08 }, W("v10", "record") + 0.1);
+      const enc = W("v10", "encrypted");
+      tl.to(".s4-bar", { scaleX: 1, duration: 0.45, ease: "power2.out", stagger: 0.1 }, enc);
+      tl.fromTo(".s4-lock", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2)", stagger: 0.1 }, enc + 0.05);
+      pop("#s4-kms", W("v10", "customer"));
+      pop("#s4-dr", W("v10", "key"));
+      pop("#s4-own", W("v10", "key") + 0.15);
+      // "used only as the data account": the data role reaches the key; the Lambda's own role is refused
+      const u = W("v10", "used");
+      tl.to("#s4-dr", { borderColor: GREEN, duration: 0.3 }, u);
+      tl.to("#s4-g1", { scaleX: 1, duration: 0.45, ease: "power1.inOut" }, u);
+      tl.to("#s4-dot1", { opacity: 1, duration: 0.1 }, u);
+      tl.to("#s4-dot1", { x: 1200, duration: 0.45, ease: "power1.inOut" }, u);
+      tl.to("#s4-dot1", { opacity: 0, duration: 0.1 }, u + 0.45);
+      // ... and the item decrypts, for this one request
+      const d = u + 0.45;
+      tl.to("#s4-g2", { scaleX: 1, duration: 0.3, ease: "power1.inOut" }, d);
+      tl.to("#s4-dot2", { opacity: 1, duration: 0.1 }, d);
+      tl.to("#s4-dot2", { x: 700, duration: 0.3, ease: "power1.inOut" }, d);
+      tl.to("#s4-dot2", { opacity: 0, duration: 0.1 }, d + 0.3);
+      tl.to(".s4-enc", { opacity: 0, filter: "blur(4px)", duration: 0.25, stagger: 0.08 }, d + 0.3);
+      tl.fromTo(".s4-plain", { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out", stagger: 0.08 }, d + 0.4);
+      tl.to("#s4-rec", { borderColor: GREEN, duration: 0.3 }, d + 0.35);
+      fade("#s4-note", d + 0.6, 0.35);
+      // "only as the data account": the Lambda's own role (the SDK's silent default) is refused
+      const o = W("v10", "as");
+      tl.to(dashA, { opacity: 1, duration: 0.05, stagger: 0.012 }, o);
+      pop("#s4-deny", W("v10", "data") + 0.1, 0.4);
+      fade("#s4-ownsub", W("v10", "data") + 0.25, 0.35);
+      out(A.concat(dashA, [".s4-row", ".s4-lock"]), F(VO.v11.start) - 0.45, 0.3);
+
+      // ---- frame B: "And the admin's broad permission never touches the sensitive table."
+      fade("#s4-kick2", F(VO.v11.start) - 0.15, 0.4);
+      rise("#s4-head2", W("v11", "the") - 0.08, 0.55, 20);
+      pop("#s4-adm", W("v11", "admins"));
+      pop("#s4-sum", W("v11", "admins") + 0.15);
+      pop("#s4-base", W("v11", "admins") + 0.3);
+      pop("#s4-scan", W("v11", "broad"), 0.4);
+      const p = W("v11", "permission");
+      tl.to("#s4-dot3", { opacity: 1, duration: 0.1 }, p);
+      tl.to("#s4-p1", { scaleX: 1, duration: 0.3, ease: "power1.in" }, p);
+      tl.to("#s4-dot3", { x: 880, duration: 0.3, ease: "power1.in" }, p);
+      tl.to("#s4-p2", { scaleY: 1, duration: 0.25, ease: "none" }, p + 0.3);
+      tl.to("#s4-dot3", { y: 490, duration: 0.25, ease: "none" }, p + 0.3);
+      tl.to("#s4-p3", { scaleX: 1, duration: 0.35, ease: "power1.out" }, p + 0.55);
+      tl.to("#s4-dot3", { x: 1238, duration: 0.35, ease: "power1.out" }, p + 0.55);
+      tl.to("#s4-dot3", { opacity: 0, duration: 0.1 }, p + 0.9);
+      tl.to("#s4-sum", { borderColor: GREEN, duration: 0.3 }, p + 0.88);
+      fade("#s4-lim", p + 0.8, 0.35);
+      const nv = W("v11", "never");
+      tl.to(dashB, { opacity: 1, duration: 0.05, stagger: 0.022 }, nv);
+      pop("#s4-deny2", W("v11", "touches") + 0.1, 0.4);
+      fade("#s4-nog", W("v11", "touches") + 0.25, 0.35);
+      tl.fromTo("#s4-bctr", { scale: 1 }, { scale: 1.22, duration: 0.25, ease: "power2.out", yoyo: true, repeat: 1 }, W("v11", "sensitive"));
+
+      out(B.concat(dashB), S1 - S0 - 0.35, 0.3);
+      window.__timelines["s4-key"] = tl;
+    })();
+  </script>
+</template>

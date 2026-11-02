@@ -1,0 +1,162 @@
+<template>
+  <style>
+    @font-face { font-family: "Geist"; src: url("assets/fonts/Geist-Regular.woff2") format("woff2"); font-weight: 400; }
+    @font-face { font-family: "Geist"; src: url("assets/fonts/Geist-Medium.woff2") format("woff2"); font-weight: 500; }
+    @font-face { font-family: "Geist"; src: url("assets/fonts/Geist-SemiBold.woff2") format("woff2"); font-weight: 600; }
+    @font-face { font-family: "Montserrat"; src: url("assets/fonts/Montserrat-SemiBold.woff2") format("woff2"); font-weight: 600; }
+    #root { position: absolute; inset: 0; }
+    #s2-kick { left: 120px; top: 118px; }
+    #s2-head { left: 120px; top: 160px; }
+    #s2-boxa { left: 120px; top: 360px; width: 560px; height: 560px; }
+    #s2-boxd { left: 1240px; top: 360px; width: 560px; height: 560px; }
+    #s2-la { left: 162px; top: 400px; }
+    #s2-ld { left: 1282px; top: 400px; }
+    #s2-fn { left: 240px; top: 470px; width: 320px; height: 100px; }
+    #s2-tb { left: 1360px; top: 470px; width: 320px; height: 100px; }
+    #s2-tb svg { width: 50px; height: 50px; overflow: visible; }
+    #s2-dr { left: 1360px; top: 710px; width: 320px; height: 100px; }
+    #s2-no { left: 700px; top: 462px; width: 520px; }
+    #s2-no span { font-weight: 500; font-size: 24px; color: var(--red); white-space: nowrap; }
+    #s2-deny { left: 1240px; top: 520px; }
+    #s2-v1 { left: 398px; top: 570px; height: 192px; }
+    #s2-h1 { left: 398px; top: 758px; width: 966px; }
+    #s2-v2 { left: 1518px; top: 570px; height: 140px; transform-origin: 50% 100%; }
+    #s2-sts { left: 680px; top: 694px; width: 560px; }
+    #s2-get { left: 1240px; top: 836px; width: 560px; }
+    #s2-cred {
+      position: absolute; left: 750px; top: 786px; width: 420px; height: 128px; padding: 18px 24px;
+      background: var(--white); border: 3px solid var(--green); border-radius: 20px;
+    }
+    #s2-cred .t { font-weight: 600; font-size: 25px; letter-spacing: -0.01em; color: var(--ink); white-space: nowrap; }
+    #s2-cred .r { font-weight: 400; font-size: 20px; line-height: 1.35; color: var(--ink-55); margin-top: 6px; white-space: nowrap; }
+  </style>
+  <div id="root" data-composition-id="s2-accounts" data-width="1920" data-height="1080">
+    <div id="s2-kick" class="kick"><b>Decision 1</b> · Separate accounts</div>
+    <div id="s2-head" class="head">The app account holds no data access.</div>
+
+    <div id="s2-boxa" class="box"></div>
+    <div id="s2-boxd" class="box"></div>
+    <div id="s2-la" class="lab">App account</div>
+    <div id="s2-ld" class="lab">Data account</div>
+
+    <!-- the only way in: down, across the boundary as a role, and up to one record -->
+    <div id="s2-v1" class="vl"></div>
+    <div id="s2-h1" class="hl"></div>
+    <div id="s2-v2" class="vl"></div>
+    <div id="s2-dashes"></div>
+
+    <div id="s2-fn" class="node">Client Lambda</div>
+    <div id="s2-tb" class="node">
+      <svg viewBox="0 0 120 120" aria-hidden="true">
+        <g fill="none" stroke="#0E2433" stroke-width="9">
+          <rect x="13" y="13" width="22" height="22" rx="5" /><rect x="49" y="13" width="22" height="22" rx="5" /><rect x="85" y="13" width="22" height="22" rx="5" />
+          <rect x="13" y="49" width="22" height="22" rx="5" /><rect x="85" y="49" width="22" height="22" rx="5" />
+          <rect x="13" y="85" width="22" height="22" rx="5" /><rect x="49" y="85" width="22" height="22" rx="5" /><rect x="85" y="85" width="22" height="22" rx="5" />
+        </g>
+        <rect id="s2-one" x="49" y="49" width="22" height="22" rx="5" stroke-width="9" />
+      </svg>
+      <span>ClientsBase</span>
+    </div>
+    <div id="s2-dr" class="node">Data role</div>
+
+    <div id="s2-no" class="cw"><span>No direct read</span></div>
+    <div id="s2-deny" class="deny"><svg width="20" height="20" viewBox="0 0 20 20"><path d="M3 3 L17 17 M17 3 L3 17" stroke="#fff" stroke-width="4" stroke-linecap="round" /></svg></div>
+    <div id="s2-sts" class="cw"><span class="chip">sts:AssumeRole · on one role ARN</span></div>
+    <div id="s2-get" class="cw"><span class="chip">GetItem, DescribeTable · on one table</span></div>
+    <div id="s2-cred">
+      <div class="t">Temporary credentials</div>
+      <div class="r">AccessKeyId, SecretAccessKey,<br />SessionToken · no long-lived keys</div>
+    </div>
+    <div id="s2-dot1" class="dot"></div>
+    <div id="s2-dot2" class="dot"></div>
+  </div>
+  <script>
+    (function () {
+      const TM = window.TM, VO = window.VO;
+      const S0 = TM.s2[0], S1 = TM.s2[1];
+      const norm = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
+      const W = (k, w, nth = 0) => {
+        const alts = w.split("|");
+        for (const exact of [true, false]) {
+          let c = 0;
+          for (const x of VO[k].words) {
+            const t = norm(x.w);
+            if (alts.some((a) => (exact ? t === a : t.startsWith(a)))) { if (c === nth) return x.t0 - S0; c++; }
+          }
+        }
+        return VO[k].start - S0;
+      };
+      const INK = "#0E2433", GREEN = "#0F9D74";
+      const tl = gsap.timeline({ paused: true });
+      const rise = (el, t, d = 0.5, dy = 22) =>
+        tl.fromTo(el, { opacity: 0, y: dy, filter: "blur(5px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: d, ease: "power3.out" }, t - 0.04);
+      const fade = (el, t, d = 0.4) => tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: d, ease: "power2.out" }, t);
+      const pop = (el, t, d = 0.45) => tl.fromTo(el, { opacity: 0, scale: 0.86 }, { opacity: 1, scale: 1, duration: d, ease: "back.out(1.7)" }, t);
+      const out = (els, t, d = 0.3) => tl.to(els, { opacity: 0, filter: "blur(5px)", duration: d, ease: "power3.in" }, t);
+
+      // the denied direct read: red dashes from the Lambda to the data account's edge
+      const dashes = [];
+      const host = document.querySelector("#s2-dashes");
+      for (let x = 572; x + 10 <= 1214; x += 18) {
+        const d = document.createElement("div");
+        d.className = "dash-seg"; d.style.cssText = `left:${x}px;top:518px;width:10px;height:4px`;
+        host.appendChild(d); dashes.push(d);
+      }
+
+      const ALL = ["#s2-kick", "#s2-head", "#s2-boxa", "#s2-boxd", "#s2-la", "#s2-ld", "#s2-fn", "#s2-tb", "#s2-dr", "#s2-no", "#s2-deny",
+        "#s2-sts", "#s2-get", "#s2-cred", "#s2-dot1", "#s2-dot2", "#s2-v1", "#s2-h1", "#s2-v2"];
+      gsap.set(ALL.concat(dashes), { opacity: 0 });
+      gsap.set(["#s2-v1", "#s2-v2"], { scaleY: 0, opacity: 1 });
+      gsap.set("#s2-h1", { scaleX: 0, opacity: 1 });
+      gsap.set("#s2-one", { fill: "rgba(15,157,116,0)", stroke: INK, transformOrigin: "50% 50%" });
+      gsap.set("#s2-dot1", { x: 400, y: 572 });
+      gsap.set("#s2-dot2", { x: 1520, y: 708 });
+
+      fade("#s2-kick", 0.1, 0.45);
+      rise("#s2-head", W("v06", "the") - 0.08, 0.55, 20);
+      tl.fromTo(["#s2-boxa", "#s2-boxd"], { opacity: 0, scale: 0.97 }, { opacity: 1, scale: 1, duration: 0.6, ease: "power3.out", stagger: 0.1 }, 0.15);
+      fade(["#s2-la", "#s2-ld"], 0.4, 0.4);
+      pop("#s2-fn", W("v06", "app") + 0.05);
+      pop("#s2-tb", W("v06", "account") + 0.05);
+
+      // "holds no data access": the direct read is denied at the boundary
+      tl.to(dashes, { opacity: 1, duration: 0.06, stagger: 0.018 }, W("v06", "no"));
+      pop("#s2-deny", W("v06", "access"), 0.4);
+      fade("#s2-no", W("v06", "access") + 0.1, 0.35);
+      tl.to(dashes.concat(["#s2-deny", "#s2-no"]), { opacity: 0.22, duration: 0.5, ease: "power2.inOut" }, W("v07", "to") + 0.1);
+
+      // "to read one record": the one record it wants
+      tl.to("#s2-one", { stroke: GREEN, duration: 0.25 }, W("v07", "record"));
+      tl.fromTo("#s2-one", { scale: 1 }, { scale: 1.25, duration: 0.25, ease: "power2.out", yoyo: true, repeat: 1 }, W("v07", "record"));
+
+      // "it assumes a role in a separate data account": down, and across as a role
+      const a = W("v07", "assumes");
+      tl.to("#s2-dot1", { opacity: 1, duration: 0.15 }, a - 0.1);
+      tl.to("#s2-v1", { scaleY: 1, duration: 0.3, ease: "power1.in" }, a);
+      tl.to("#s2-dot1", { y: 760, duration: 0.3, ease: "power1.in" }, a);
+      tl.to("#s2-h1", { scaleX: 1, duration: 0.8, ease: "power1.inOut" }, a + 0.3);
+      tl.to("#s2-dot1", { x: 1356, duration: 0.8, ease: "power1.inOut" }, a + 0.3);
+      fade("#s2-sts", a + 0.35, 0.4);
+      pop("#s2-dr", W("v07", "role"));
+      tl.to("#s2-dot1", { opacity: 0, duration: 0.15 }, a + 1.1);
+      tl.to("#s2-dr", { borderColor: GREEN, duration: 0.3 }, a + 1.05);
+      tl.to("#s2-ld", { color: GREEN, duration: 0.3 }, W("v07", "separate"));
+
+      // "with temporary credentials"
+      pop("#s2-cred", W("v07", "temporary") - 0.05, 0.5);
+
+      // and up to the one record: GetItem on one table
+      const g = W("v07", "credentials") + 0.55;
+      fade("#s2-get", g - 0.1, 0.4);
+      tl.to("#s2-dot2", { opacity: 1, duration: 0.12 }, g);
+      tl.to("#s2-v2", { scaleY: 1, duration: 0.35, ease: "power1.inOut" }, g);
+      tl.to("#s2-dot2", { y: 572, duration: 0.35, ease: "power1.inOut" }, g);
+      tl.to("#s2-dot2", { opacity: 0, duration: 0.12 }, g + 0.38);
+      tl.to("#s2-one", { fill: GREEN, stroke: GREEN, duration: 0.25, ease: "power2.out" }, g + 0.36);
+      tl.to("#s2-tb", { borderColor: GREEN, duration: 0.25 }, g + 0.36);
+
+      out(ALL.concat(dashes), S1 - S0 - 0.4, 0.3);
+      window.__timelines["s2-accounts"] = tl;
+    })();
+  </script>
+</template>

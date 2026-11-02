@@ -1,0 +1,193 @@
+<template>
+  <style>
+    @font-face { font-family: "Geist"; src: url("assets/fonts/Geist-Regular.woff2") format("woff2"); font-weight: 400; }
+    @font-face { font-family: "Geist"; src: url("assets/fonts/Geist-Medium.woff2") format("woff2"); font-weight: 500; }
+    @font-face { font-family: "Geist"; src: url("assets/fonts/Geist-SemiBold.woff2") format("woff2"); font-weight: 600; }
+    @font-face { font-family: "Chakra Petch"; src: url("assets/fonts/ChakraPetch-600.woff2") format("woff2"); font-weight: 600; }
+    @font-face { font-family: "Chakra Petch"; src: url("assets/fonts/ChakraPetch-700.woff2") format("woff2"); font-weight: 700; }
+    @font-face { font-family: "Montserrat"; src: url("assets/fonts/Montserrat-SemiBold.woff2") format("woff2"); font-weight: 600; }
+    #root { position: absolute; inset: 0; }
+    /* the hook: text left (Outbreak's opening frame), the account on the right */
+    #s1-kick { left: 140px; top: 342px; }
+    #s1-h1 { left: 140px; top: 392px; font-size: 96px; }
+    #s1-kick2 { left: 140px; top: 272px; }
+    #s1-h2 { left: 140px; top: 322px; font-size: 96px; }
+    .s1-stat { position: absolute; left: 140px; display: flex; align-items: center; gap: 14px; font-weight: 500; font-size: 30px; color: var(--ink-70); white-space: nowrap; }
+    .s1-stat .bul { width: 14px; height: 14px; border-radius: 50%; }
+    .s1-stat .num { font-weight: 600; font-size: 36px; }
+    #s1-stat { top: 618px; }
+    #s1-stat .bul { background: var(--red); }
+    #s1-stat .num { color: var(--red); }
+    #s1-stat2 { top: 666px; }
+    #s1-stat2 .bul { background: var(--green); }
+    #s1-stat2 .num { color: var(--green-text); }
+    #s1-box { left: 980px; top: 250px; width: 820px; height: 600px; }
+    #s1-boxa { left: 980px; top: 250px; width: 290px; height: 600px; }
+    #s1-boxd { left: 1310px; top: 250px; width: 490px; height: 600px; }
+    #s1-l1, #s1-l2 { left: 1022px; top: 292px; }
+    #s1-l3 { left: 1352px; top: 292px; }
+    #s1-app { left: 1022px; top: 510px; width: 206px; height: 100px; font-size: 28px; }
+    #s1-con { left: 1232px; top: 558px; width: 150px; background: var(--red); }
+    #s1-grid { position: absolute; left: 1345px; top: 350px; width: 420px; height: 420px; overflow: visible; }
+    #s1-key { position: absolute; left: 898px; top: 530px; width: 120px; height: 60px; }
+    #s1-deny { left: 1290px; top: 560px; }
+    /* the title: the data account's records become the mark */
+    #s1-wm { position: absolute; left: 0; top: 556px; width: 1920px; text-align: center; font-family: "Chakra Petch", sans-serif; font-weight: 700; font-size: 88px; letter-spacing: 0.12em; padding-left: 0.12em; color: var(--ink); white-space: nowrap; }
+    #s1-wm .w { display: inline-block; }
+    #s1-tag { left: 0; top: 690px; width: 1920px; text-align: center; font-size: 38px; }
+    #s1-stack { left: 0; top: 786px; width: 1920px; text-align: center; padding-left: 0.14em; }
+  </style>
+  <div id="root" data-composition-id="s1-open" data-width="1920" data-height="1080">
+    <div id="s1-box" class="box"></div>
+    <div id="s1-boxa" class="box"></div>
+    <div id="s1-boxd" class="box"></div>
+    <div id="s1-l1" class="lab">One AWS account</div>
+    <div id="s1-l2" class="lab">App account</div>
+    <div id="s1-l3" class="lab">Data account</div>
+    <div id="s1-con" class="hl"></div>
+    <div id="s1-app" class="node">Client app</div>
+    <svg id="s1-key" viewBox="0 0 120 60" aria-hidden="true">
+      <circle cx="22" cy="30" r="15" fill="none" stroke="#D64545" stroke-width="8" />
+      <rect x="37" y="26" width="76" height="8" rx="3" fill="#D64545" />
+      <rect x="88" y="30" width="8" height="17" rx="2" fill="#D64545" />
+      <rect x="102" y="30" width="8" height="12" rx="2" fill="#D64545" />
+    </svg>
+    <div id="s1-dashes"></div>
+    <div id="s1-deny" class="deny"><svg width="20" height="20" viewBox="0 0 20 20"><path d="M3 3 L17 17 M17 3 L3 17" stroke="#fff" stroke-width="4" stroke-linecap="round" /></svg></div>
+    <!-- nine client records, laid out on the mark's own grid (viewBox 120: squares at 13, 49, 85; 22 wide; stroke 6) -->
+    <svg id="s1-grid" viewBox="0 0 120 120" aria-hidden="true">
+      <defs>
+        <mask id="s1-kh" maskUnits="userSpaceOnUse" x="0" y="0" width="120" height="120">
+          <rect x="0" y="0" width="120" height="120" fill="#fff" />
+          <circle cx="60" cy="56" r="5" fill="#000" />
+          <rect x="57.5" y="57" width="5" height="11" rx="2" fill="#000" />
+        </mask>
+      </defs>
+      <rect class="s1-r" id="s1-r0" x="13" y="13" width="22" height="22" rx="5" stroke-width="6" />
+      <rect class="s1-r" id="s1-r1" x="49" y="13" width="22" height="22" rx="5" stroke-width="6" />
+      <rect class="s1-r" id="s1-r2" x="85" y="13" width="22" height="22" rx="5" stroke-width="6" />
+      <rect class="s1-r" id="s1-r3" x="13" y="49" width="22" height="22" rx="5" stroke-width="6" />
+      <rect class="s1-r" id="s1-r4" x="49" y="49" width="22" height="22" rx="5" stroke-width="6" />
+      <rect class="s1-r" id="s1-r5" x="85" y="49" width="22" height="22" rx="5" stroke-width="6" />
+      <rect class="s1-r" id="s1-r6" x="13" y="85" width="22" height="22" rx="5" stroke-width="6" />
+      <rect class="s1-r" id="s1-r7" x="49" y="85" width="22" height="22" rx="5" stroke-width="6" />
+      <rect class="s1-r" id="s1-r8" x="85" y="85" width="22" height="22" rx="5" stroke-width="6" />
+      <rect id="s1-ctr" x="46" y="46" width="28" height="28" rx="6" fill="#0F9D74" mask="url(#s1-kh)" />
+    </svg>
+
+    <div id="s1-kick" class="kick">In most apps · one account holds it all</div>
+    <div id="s1-h1" class="head"><span class="w">One</span> <span class="w">stolen</span><br /><span class="w">credential.</span></div>
+    <div id="s1-stat" class="s1-stat"><span class="bul"></span><span><span class="num" id="s1-n">0</span> of 9 client records exposed</span></div>
+
+    <div id="s1-kick2" class="kick"><b>Here</b> · the data lives in its own account</div>
+    <div id="s1-h2" class="head"><span class="w">Breaking in</span><br /><span class="w">doesn't expose</span><br /><span class="w">the data.</span></div>
+    <div id="s1-stat2" class="s1-stat"><span class="bul"></span><span><span class="num">0</span> of 9 client records exposed</span></div>
+
+    <div id="s1-wm"><span class="w">SECURE</span> <span class="w">DATA</span> <span class="w">HUB</span></div>
+    <div id="s1-tag" class="sub">A multi-account AWS architecture for sensitive client data.</div>
+    <div id="s1-stack" class="lab">API Gateway · Cognito · Lambda · STS · DynamoDB · KMS · Terraform</div>
+  </div>
+  <script>
+    (function () {
+      const TM = window.TM, VO = window.VO;
+      const S0 = TM.s1[0], S1 = TM.s1[1];
+      const norm = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
+      const W = (k, w, nth = 0) => {
+        const alts = w.split("|");
+        for (const exact of [true, false]) {
+          let c = 0;
+          for (const x of VO[k].words) {
+            const t = norm(x.w);
+            if (alts.some((a) => (exact ? t === a : t.startsWith(a)))) { if (c === nth) return x.t0 - S0; c++; }
+          }
+        }
+        return VO[k].start - S0;
+      };
+      const F = (t) => t - S0;
+      const INK = "#0E2433", RED = "#D64545";
+      const tl = gsap.timeline({ paused: true });
+      const rise = (el, t, d = 0.5, dy = 22) =>
+        tl.fromTo(el, { opacity: 0, y: dy, filter: "blur(5px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: d, ease: "power3.out" }, t - 0.04);
+      const fade = (el, t, d = 0.4) => tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: d, ease: "power2.out" }, t);
+      const pop = (el, t, d = 0.45) => tl.fromTo(el, { opacity: 0, scale: 0.86 }, { opacity: 1, scale: 1, duration: d, ease: "back.out(1.7)" }, t);
+      const out = (els, t, d = 0.3) => tl.to(els, { opacity: 0, filter: "blur(5px)", duration: d, ease: "power3.in" }, t);
+
+      // the attempt that stops at the wall: short red dashes from the app to the gap between the accounts
+      const dashes = [];
+      const host = document.querySelector("#s1-dashes");
+      for (let x = 1236; x + 10 <= 1272; x += 18) {
+        const d = document.createElement("div");
+        d.className = "dash-seg"; d.style.cssText = `left:${x}px;top:558px;width:10px;height:4px`;
+        host.appendChild(d); dashes.push(d);
+      }
+
+      const recs = gsap.utils.toArray(".s1-r");
+      const byCol = [0, 3, 6, 1, 4, 7, 2, 5, 8].map((i) => recs[i]);   // nearest the app first
+      const A = ["#s1-kick", "#s1-h1 .w", "#s1-stat"];
+      const B = ["#s1-kick2", "#s1-h2 .w", "#s1-stat2"];
+      const T = ["#s1-wm .w", "#s1-tag", "#s1-stack"];
+      gsap.set(A.concat(B, T, ["#s1-box", "#s1-boxa", "#s1-boxd", "#s1-l1", "#s1-l2", "#s1-l3", "#s1-app", "#s1-key", "#s1-deny", "#s1-ctr"], dashes, recs), { opacity: 0 });
+      gsap.set(recs, { fill: "rgba(214,69,69,0)", stroke: INK, transformOrigin: "50% 50%" });
+      gsap.set("#s1-ctr", { transformOrigin: "50% 50%" });
+      gsap.set("#s1-con", { scaleX: 0 });
+      gsap.set("#s1-grid", { transformOrigin: "50% 50%" });
+
+      // ---- frame A: one account; one stolen credential opens every record
+      fade("#s1-kick", 0.3, 0.5);
+      tl.fromTo("#s1-box", { opacity: 0, scale: 0.97 }, { opacity: 1, scale: 1, duration: 0.6, ease: "power3.out" }, 0.15);
+      fade("#s1-l1", 0.4, 0.4);
+      pop("#s1-app", 0.35);
+      tl.fromTo(recs, { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.7)", stagger: 0.04 }, 0.3);
+      ["one", "stolen", "credential"].forEach((w, k) => rise(`#s1-h1 .w:nth-child(${k + 1 + (k === 2 ? 1 : 0)})`, W("v01", w) - 0.06, 0.5, 20));
+      tl.fromTo("#s1-key", { opacity: 0, x: -160 }, { opacity: 1, x: 0, duration: 0.55, ease: "power3.out" }, W("v01", "stolen"));
+      const opens = W("v02", "opens"), every = W("v02", "every");
+      tl.to("#s1-app", { borderColor: RED, color: RED, duration: 0.25, ease: "power2.out" }, opens);
+      tl.to("#s1-con", { scaleX: 1, duration: 0.3, ease: "power2.inOut" }, opens + 0.05);
+      tl.to(byCol, { fill: RED, stroke: RED, duration: 0.35, ease: "power2.out", stagger: 0.09 }, every);
+      rise("#s1-stat", every - 0.1, 0.45, 12);
+      const n = { v: 0 };
+      tl.fromTo(n, { v: 0 }, {
+        v: 9, duration: 0.09 * 8 + 0.35, ease: "none",
+        onUpdate: () => { document.querySelector("#s1-n").textContent = String(Math.round(n.v)); },
+      }, every);
+
+      // ---- frame B: the same app, but the data sits in its own account
+      const here = W("v03", "here");
+      out(A, here - 0.28, 0.25);
+      tl.to(["#s1-box", "#s1-l1"], { opacity: 0, duration: 0.35, ease: "power2.inOut" }, here);
+      tl.fromTo(["#s1-boxa", "#s1-boxd"], { opacity: 0, scale: 0.98 }, { opacity: 1, scale: 1, duration: 0.5, ease: "power3.out", stagger: 0.06 }, here + 0.05);
+      fade(["#s1-l2", "#s1-l3"], here + 0.2, 0.4);
+      tl.to("#s1-key", { opacity: 0, x: -120, duration: 0.35, ease: "power2.in" }, here);
+      tl.to("#s1-app", { borderColor: INK, color: INK, duration: 0.3 }, here);
+      tl.to("#s1-con", { opacity: 0, duration: 0.25 }, here);
+      tl.to(byCol.slice().reverse(), { fill: "rgba(214,69,69,0)", stroke: INK, duration: 0.4, ease: "power2.out", stagger: 0.05 }, here + 0.1);
+      fade("#s1-kick2", here + 0.05, 0.45);
+      rise("#s1-h2 .w:nth-child(1)", W("v03", "breaking") - 0.06, 0.5, 20);
+      rise("#s1-h2 .w:nth-child(3)", W("v03", "doesnt") - 0.06, 0.5, 20);
+      rise("#s1-h2 .w:nth-child(5)", W("v03", "the", 1) - 0.06, 0.5, 20);
+      // the credential breaks into the app ...
+      tl.fromTo("#s1-key", { opacity: 0, x: -160 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, W("v03", "breaking"));
+      tl.to(["#s1-app", "#s1-boxa"], { borderColor: RED, duration: 0.25, ease: "power2.out" }, W("v03", "app"));
+      tl.to("#s1-app", { color: RED, duration: 0.25 }, W("v03", "app"));
+      // ... and stops at the wall
+      tl.to(dashes, { opacity: 1, duration: 0.08, stagger: 0.07 }, W("v03", "expose"));
+      pop("#s1-deny", W("v03", "data"), 0.4);
+      rise("#s1-stat2", W("v03", "data") + 0.35, 0.45, 12);
+
+      // ---- the title: everything clears but the records, which travel to the centre and become the mark on the drop
+      const tOut = TM.drop - 1.75;
+      out(B.concat(["#s1-key", "#s1-boxa", "#s1-boxd", "#s1-l2", "#s1-l3", "#s1-app", "#s1-deny"], dashes), tOut, 0.4);
+      tl.to("#s1-grid", { x: 960 - 1555, y: 360 - 560, scale: 300 / 420, duration: 1.45, ease: "power2.inOut" }, tOut + 0.1);
+      tl.to("#s1-r4", { opacity: 0, duration: 0.12 }, F(TM.drop) - 0.05);
+      tl.fromTo("#s1-ctr", { opacity: 0, scale: 0.3 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(2)" }, F(TM.drop) - 0.03);
+      rise("#s1-wm .w:nth-child(1)", W("v04", "secure") + 0.1, 0.5, 18);
+      rise("#s1-wm .w:nth-child(2)", W("v04", "data"), 0.5, 18);
+      rise("#s1-wm .w:nth-child(3)", W("v04", "hub"), 0.5, 18);
+      rise("#s1-tag", W("v05", "multi") - 0.18, 0.55, 14);
+      fade("#s1-stack", W("v05", "architecture"), 0.6);
+
+      out(T.concat(["#s1-grid"]), S1 - S0 - 0.45, 0.35);
+      window.__timelines["s1-open"] = tl;
+    })();
+  </script>
+</template>

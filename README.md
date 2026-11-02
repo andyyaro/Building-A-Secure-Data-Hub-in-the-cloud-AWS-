@@ -4,6 +4,12 @@
 
 # Secure Data Hub — a multi-account AWS architecture for sensitive client data
 
+<p align="center">
+  <a href="https://andyyaro.github.io/Building-A-Secure-Data-Hub-in-the-cloud-AWS-/film.html"><img src="docs/assets/readme/secure-data-hub-in-action.webp" alt="The request path, from the launch film: the app account's Client Lambda is denied a direct read of the ClientsBase table, assumes a role in the data account through STS and reads one record with temporary credentials; then the caller's own client_id is struck out, API Gateway takes the tenant ID from the verified Cognito token before the Lambda runs, and a token without the claim gets a 400 and never reaches the Lambda. Select to watch the 63-second film." width="920"></a>
+</p>
+
+<p align="center"><b>Watch the 63-second launch film:</b> <a href="https://andyyaro.github.io/Building-A-Secure-Data-Hub-in-the-cloud-AWS-/film.html">with sound and captions</a> · <a href="https://andyyaro.github.io/Building-A-Secure-Data-Hub-in-the-cloud-AWS-/film/secure-data-hub-launch.mp4">MP4, 9.0 MB</a> · <a href="media/launch-film/">how it was made</a></p>
+
 A serverless reference build for storing and serving client PII across **separate AWS accounts**,
 so that compromising the application tier does not expose the data tier.
 
@@ -138,6 +144,8 @@ application_webpages/
   AdminApp/                                OIDC authorization-code SPA (oidc-client-ts, no client secret)
 cognito/                                   token retrieval notes
 readme_images/                             the 31-slide architecture deck
+media/launch-film/                         the 63-second launch film's source: composition, narration,
+                                           sound, captions and the watch page
 ```
 
 The admin SPA runs the OIDC authorization-code flow against the Cognito Hosted UI with no client

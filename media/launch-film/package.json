@@ -1,0 +1,12 @@
+{
+  "name": "secure-data-hub-film",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "python3 -I build.py",
+    "captions": "python3 -I narration/vtt.py",
+    "lint": "npx --yes hyperframes@0.8.173 lint",
+    "check": "npx --yes hyperframes@0.8.173 check",
+    "render": "npx --yes hyperframes@0.8.173 render -o renders/raw.mp4 --fps 30"
+  }
+}
